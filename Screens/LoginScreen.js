@@ -22,6 +22,7 @@ const LoginScreen = () => {
   }, [])
 
   const handleSignUp = () => {
+    
     createUserWithEmailAndPassword(auth, email, password) // Use createUserWithEmailAndPassword from Firebase Modular SDK
       .then(userCredentials => {
         const user = userCredentials.user;
