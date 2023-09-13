@@ -1,0 +1,40 @@
+
+{
+  "project_info": {
+    "project_number": "48685057683",
+    "project_id": "fitx-385b9",
+    "storage_bucket": "fitx-385b9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48685057683:android:8265c6c416fb5ca65aef66",
+        "android_client_info": {
+          "package_name": "com.wager2000.FITX"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48685057683-27flvjihg4rka1r254aspd5qqtk9ckml.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDku5aSHsE7D70f2_JA-jLvEMyHT2nDOZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48685057683-27flvjihg4rka1r254aspd5qqtk9ckml.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
