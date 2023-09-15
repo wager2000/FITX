@@ -65,6 +65,15 @@ const Startscreen = () => {
     } else {
       // Handle other button presses
     }
+    
+  };
+  const handleButtonPressToSearch = (button) => {
+    if (button.text === 'Search') {
+      navigation.navigate('Search');
+    } else {
+      // Handle other button presses
+    }
+    
   };
 
   return (
@@ -124,7 +133,10 @@ const Startscreen = () => {
   </View>
 </TouchableOpacity>
 
-        <TouchableOpacity style={styles.bottomBarButton}>
+        <TouchableOpacity style={styles.bottomBarButton}
+                  onPress={() => navigation.navigate('Search')}
+
+        >
           <View style={styles.buttonIconContainer}>
             <Image source={require('../assets/search.png')} style={styles.buttonIcon} />
             <Text style={styles.bottomBarButtonText}>Search</Text>
@@ -229,7 +241,7 @@ marginBottom:10
       position: 'absolute',
     },
     bottomBarButton5:{
-        
+
     }
   });
 

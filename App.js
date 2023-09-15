@@ -6,6 +6,7 @@ import LoginScreen from '../FITX/Screens/LoginScreen';
 import HomeScreen from '../FITX/Screens/HomeScreen';
 import Startscreen from '../FITX/Screens/Startscreen';
 import SettingsScreen from '../FITX/Screens/Settings';
+import SearchScreen from '../FITX/Screens/SearchScreen';
 
 import { AppRegistry } from 'react-native';
 
@@ -21,6 +22,7 @@ export default function App() {
         <Stack.Screen options={{ headerShown: true }} name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen name="Search" component={SearchScreen} />
 
       </Stack.Navigator>
     </NavigationContainer>
