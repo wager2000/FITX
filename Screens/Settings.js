@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
 
 const SettingsScreen = () => {
   return (
@@ -22,17 +22,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   header: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   settingItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 16,
   },
   settingLabel: {
@@ -40,11 +40,8 @@ const styles = StyleSheet.create({
   },
   settingValue: {
     fontSize: 16,
-    color: 'gray',
+    color: "gray",
   },
 });
 
-
-
-
-export default SettingsScreen
+export default SettingsScreen;

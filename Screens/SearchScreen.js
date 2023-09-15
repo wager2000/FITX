@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
-import { collection, getDocs, query, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, TextInput } from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import { collection, getDocs, query, onSnapshot } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 const SearchScreen = () => {
   const [places, setPlaces] = useState([]);
 
   useEffect(() => {
     // Create a reference to the "Places" collection
-    const placesRef = collection(db, 'Places');
+    const placesRef = collection(db, "Places");
 
     // Fetch places from Firestore initially
     const fetchPlaces = async () => {
@@ -84,13 +84,13 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     borderBottomWidth: 1,
-    borderBottomColor: '#DDDDDD',
+    borderBottomColor: "#DDDDDD",
   },
   searchInput: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     paddingHorizontal: 8,
   },

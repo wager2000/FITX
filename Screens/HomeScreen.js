@@ -1,23 +1,29 @@
-import React from 'react';
-import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
-import Swiper from 'react-native-swiper';
+import React from "react";
+import { View, Text, ScrollView, Image, StyleSheet } from "react-native";
+import Swiper from "react-native-swiper";
 
-const Startscreen = () => {
+const HomeScreen = () => {
   return (
     <ScrollView horizontal style={styles.container}>
       {[1, 2, 3, 4, 5].map((list, index) => (
         <View key={index} style={styles.listContainer}>
           <Text style={styles.listTitle}>Liste {list}</Text>
           <Swiper style={styles.swiper} vertical>
-            <Image source={require('../assets/Cross.jpeg')} style={styles.image} />
-            <Image source={require('../assets/mindful_yoga_aarhus.jpeg')} style={styles.image} />
+            <Image
+              source={require("../assets/Cross.jpeg")}
+              style={styles.image}
+            />
+            <Image
+              source={require("../assets/mindful_yoga_aarhus.jpeg")}
+              style={styles.image}
+            />
             {/* Tilføj flere billeder her */}
           </Swiper>
         </View>
       ))}
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -25,11 +31,11 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     marginHorizontal: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   listTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginVertical: 10,
   },
   swiper: {
@@ -42,4 +48,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Startscreen;
+export default HomeScreen;
+{
+  /* homescreen */
+}

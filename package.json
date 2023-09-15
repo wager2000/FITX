@@ -23,7 +23,8 @@
     "react-native-maps": "^1.7.1",
     "react-native-swiper": "^1.6.0",
     "react-navigation": "^4.4.4",
-    "react-navigation-tabs": "^2.11.2"
+    "react-navigation-tabs": "^2.11.2",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
