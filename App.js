@@ -2,11 +2,11 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Startscreen from "./Screens/StartScreen";
-import SearchScreen from "./Screens/SearchScreen";
-import SettingsScreen from "./Screens/Settings";
-import HomeScreen from "./Screens/HomeScreen";
-import LoginScreen from "./Screens/LoginScreen";
+import Startscreen from "./Components/StartScreen";
+import SearchScreen from "./Components/SearchScreen";
+import SettingsScreen from "./Components/Settings";
+import HomeScreen from "./Components/HomeScreen";
+import LoginScreen from "./Components/LoginScreen";
 
 import { AppRegistry } from "react-native";
 
