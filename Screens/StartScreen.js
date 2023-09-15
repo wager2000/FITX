@@ -84,6 +84,8 @@ const Startscreen = () => {
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
+      <Text style={styles.text}>Her er aktiveterne</Text>
+
         {buttons.slice(0, 5).map((button) => (
           <TouchableOpacity
             key={button.id}
