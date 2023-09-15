@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TextInput, Button } from "react-native";
+import { View, StyleSheet, TextInput, Button, Image } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { collection, getDocs, query, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
+import { Card, Title, Paragraph } from 'react-native-paper';
+
 
 const SearchScreen = () => {
   const [places, setPlaces] = useState([]);
@@ -89,17 +91,44 @@ const SearchScreen = () => {
       >
         {/* Add markers for each place */}
         {places.map((place) => (
-          <Marker
-            key={place.id} // Use a unique key, e.g., place.id
-            coordinate={{
-              latitude: place.Place.latitude,
-              longitude: place.Place.longitude,
-            }}
-            title={place.Name}
-            description={place.Description}
-          />
+        <Marker
+        key={place.id} // Use a unique key, e.g., place.id
+        coordinate={{
+          latitude: place.Place.latitude,
+          longitude: place.Place.longitude,
+        }}
+        title={place.Name}
+        description={place.Description}
+        onPress={() => setSelectedPlace(place)} // Handle marker press
+
+      >
+        {/* Use the Image component to set a custom icon */}
+        <Image source={require('../assets/location-pin.png')} style={{ width: 40, height: 40 }} />
+      </Marker>
+          
+          
         ))}
       </MapView>
+      {selectedPlace && (
+        <Card style={styles.card}>
+          <Card.Cover
+            source={require("../assets/Cross.jpeg")} // Add a background image for the card
+            style={styles.cardCover}
+          />
+          <Card.Content>
+            <Title style={styles.cardTitle}>{selectedPlace.Name}</Title>
+            <Paragraph style={styles.cardText}>
+              Description: {selectedPlace.Description}
+            </Paragraph>
+            <Paragraph style={styles.cardText}>
+              Category: {selectedPlace.Category}
+            </Paragraph>
+            <Paragraph style={styles.cardText}>
+              Niveau: {selectedPlace.Niveau}
+            </Paragraph>
+          </Card.Content>
+        </Card>
+      )}
     </View>
   );
 };
@@ -111,7 +140,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     padding: 16,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#F0F0F0", // Background color for the search container
     borderBottomWidth: 1,
     borderBottomColor: "#DDDDDD",
   },
@@ -121,9 +150,45 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderWidth: 1,
     paddingHorizontal: 8,
+    marginRight: 16,
+    borderRadius: 8,
+    backgroundColor: "#FFFFFF", // Background color for the search input
   },
   map: {
     flex: 1,
+  },
+  card: {
+    position: "absolute",
+    bottom: 16,
+    left: 16,
+    right: 16,
+    elevation: 4,
+    borderRadius: 8,
+    backgroundColor: "#FFFFFF",
+    padding: 16,
+  },
+  cardCover: {
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    height: 150,
+  },
+  cardTitle: {
+    fontSize: 24,
+    marginBottom: 8,
+    color: "#333333", // Text color for the title
+  },
+  cardText: {
+    fontSize: 16,
+    marginBottom: 4,
+    color: "#666666", // Text color for description, category, and niveau
+  },
+  cardCategory: {
+    color: "#007AFF", // Text color for the category
+    fontWeight: "bold",
+  },
+  cardNiveau: {
+    color: "#4CAF50", // Text color for the niveau
+    fontWeight: "bold",
   },
 });
 
