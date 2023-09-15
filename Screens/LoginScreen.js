@@ -2,6 +2,8 @@ import { useNavigation } from '@react-navigation/core'
 import React, { useEffect, useState } from 'react'
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'; // Import Firebase Modular SDK components
+import { collection, addDoc } from "firebase/firestore"; 
+import { db } from '../firebaseConfig';
 
 import { auth } from '../firebaseConfig' // Make sure you are still importing 'auth' from firebaseConfig
 
@@ -21,15 +23,33 @@ const LoginScreen = () => {
     return unsubscribe
   }, [])
 
-  const handleSignUp = () => {
-    
-    createUserWithEmailAndPassword(auth, email, password) // Use createUserWithEmailAndPassword from Firebase Modular SDK
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        console.log('Registered with:', user.email);
-      })
-      .catch(error => alert(error.message))
+  const handleSignUp = async () => {
+    try {
+      // Initialize Firestore
+
+      // Add user data to Firestore
+      const userRef = collection(db, 'users'); // Reference to a Firestore collection
+      const userData = {
+        Email: email,
+        Password: password
+        // Add other user data as needed
+      };
+
+      const docRef = await addDoc(userRef, userData); // Add a document to the collection
+      console.log('Document written with ID: ', docRef.id);
+      
+      // Proceed with user registration
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(userCredentials => {
+          const user = userCredentials.user;
+          console.log('Registered with:', user.email);
+        })
+        .catch(error => alert(error.message));
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
   }
+
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password) // Use signInWithEmailAndPassword from Firebase Modular SDK
@@ -101,12 +121,12 @@ const styles = StyleSheet.create({
     width: '60%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 10,
   },
   button: {
     backgroundColor: '#0782F9',
     width: '100%',
-    padding: 15,
+    padding: 10,
     borderRadius: 10,
     alignItems: 'center',
   },

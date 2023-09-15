@@ -1,52 +1,45 @@
-import { useNavigation } from '@react-navigation/core'
-import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { auth } from '../firebaseConfig'
+import React from 'react';
+import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
+import Swiper from 'react-native-swiper';
 
-const HomeScreen = () => {
-  const navigation = useNavigation()
-
-  const handleSignOut = () => {
-    auth
-      .signOut()
-      .then(() => {
-        navigation.replace("Login")
-      })
-      .catch(error => alert(error.message))
-  }
-
+const Startscreen = () => {
   return (
-    <View style={styles.container}>
-      <Text>Email: {auth.currentUser?.email}</Text>
-      <TouchableOpacity
-        onPress={handleSignOut}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Sign out</Text>
-      </TouchableOpacity>
-    </View>
-  )
+    <ScrollView horizontal style={styles.container}>
+      {[1, 2, 3, 4, 5].map((list, index) => (
+        <View key={index} style={styles.listContainer}>
+          <Text style={styles.listTitle}>Liste {list}</Text>
+          <Swiper style={styles.swiper} vertical>
+            <Image source={require('../assets/Cross.jpeg')} style={styles.image} />
+            <Image source={require('../assets/mindful_yoga_aarhus.jpeg')} style={styles.image} />
+            {/* Tilføj flere billeder her */}
+          </Swiper>
+        </View>
+      ))}
+    </ScrollView>
+  );
 }
-
-export default HomeScreen
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
   },
-   button: {
-    backgroundColor: '#0782F9',
-    width: '60%',
-    padding: 15,
-    borderRadius: 10,
+  listContainer: {
+    marginHorizontal: 10,
     alignItems: 'center',
-    marginTop: 40,
   },
-  buttonText: {
-    color: 'white',
-    fontWeight: '700',
-    fontSize: 16,
+  listTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 10,
   },
-})
+  swiper: {
+    height: 200,
+  },
+  image: {
+    width: 150,
+    height: 150,
+    marginVertical: 5,
+  },
+});
+
+export default Startscreen;

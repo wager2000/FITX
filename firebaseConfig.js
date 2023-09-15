@@ -21,7 +21,7 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
+/*
 try {
   const docRef = addDoc(collection(db, "users"), {
     Email: "Ada",
@@ -31,6 +31,8 @@ try {
 } catch (e) {
   console.error("Error adding document: ", e);
 }
+*/
+
 const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
 });
@@ -39,4 +41,6 @@ const auth = initializeAuth(app, {
 
 
 export { auth };
+export { db };
+
 
