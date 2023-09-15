@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TextInput } from "react-native";
+import { View, StyleSheet, TextInput, Button } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { collection, getDocs, query, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
 const SearchScreen = () => {
   const [places, setPlaces] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedPlace, setSelectedPlace] = useState(null);
 
   useEffect(() => {
     // Create a reference to the "Places" collection
@@ -43,14 +45,28 @@ const SearchScreen = () => {
     };
   }, []);
 
+  // Function to handle the search and focus on the selected place
+  const handleSearch = () => {
+    const placeToSearch = searchQuery.trim();
+    const selected = places.find((place) => place.Name === placeToSearch);
+    if (selected) {
+      setSelectedPlace(selected);
+    } else {
+      setSelectedPlace(null);
+      // Handle case when the place is not found
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
           placeholder="Search"
-          // You can add onChangeText and value props to handle search functionality
+          onChangeText={(text) => setSearchQuery(text)}
+          value={searchQuery}
         />
+        <Button title="Search" onPress={handleSearch} />
       </View>
       <MapView
         style={styles.map}
@@ -60,6 +76,16 @@ const SearchScreen = () => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
+        region={
+          selectedPlace
+            ? {
+                latitude: selectedPlace.Place.latitude,
+                longitude: selectedPlace.Place.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }
+            : undefined
+        }
       >
         {/* Add markers for each place */}
         {places.map((place) => (
@@ -83,12 +109,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   searchContainer: {
+    flexDirection: "row",
     padding: 16,
     backgroundColor: "#FFFFFF",
     borderBottomWidth: 1,
     borderBottomColor: "#DDDDDD",
   },
   searchInput: {
+    flex: 1,
     height: 40,
     borderColor: "gray",
     borderWidth: 1,
