@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TextInput, Button, Image } from "react-native";
-import MapView, { Marker } from "react-native-maps";
-import { collection, getDocs, query, onSnapshot } from "firebase/firestore";
+import MapView, { Marker, Circle } from "react-native-maps"; // Import Circle component
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
-import { Card, Title, Paragraph } from 'react-native-paper';
-
+import { Card, Title, Paragraph } from "react-native-paper";
+import * as Location from "expo-location";
 
 const SearchScreen = () => {
   const [places, setPlaces] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPlace, setSelectedPlace] = useState(null);
+  const [userLocation, setUserLocation] = useState(null); // Store user's location
+  const [initialRegion, setInitialRegion] = useState({
+    latitude: 55.6761, // Default latitude if user location is not available
+    longitude: 12.5683, // Default longitude if user location is not available
+    latitudeDelta: 0.02, // Smaller value for closer zoom
+    longitudeDelta: 0.02, // Smaller value for closer zoom
+  });
 
   useEffect(() => {
     // Create a reference to the "Places" collection
@@ -59,6 +66,37 @@ const SearchScreen = () => {
     }
   };
 
+  // Get the user's location on component mount
+  useEffect(() => {
+    const getLocation = async () => {
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          console.error("Location permission denied");
+          return;
+        }
+
+        const location = await Location.getCurrentPositionAsync({});
+        console.log("User location:", location.coords);
+        setUserLocation(location.coords);
+
+        // Update the initial region with the user's location
+        if (location.coords) {
+          setInitialRegion({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.02,
+            longitudeDelta: 0.02,
+          });
+        }
+      } catch (error) {
+        console.error("Error getting location: ", error);
+      }
+    };
+
+    getLocation();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
@@ -72,67 +110,50 @@ const SearchScreen = () => {
       </View>
       <MapView
         style={styles.map}
-        initialRegion={{
-          latitude: 55.6761,
-          longitude: 12.5683,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-        region={
-          selectedPlace
-            ? {
-                latitude: selectedPlace.Place.latitude,
-                longitude: selectedPlace.Place.longitude,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
-              }
-            : undefined
-        }
+        region={initialRegion}
       >
+        {/* Add a Circle component for the user's location */}
+        {userLocation && (
+          <Circle
+            center={{
+              latitude: userLocation.latitude,
+              longitude: userLocation.longitude,
+            }}
+            radius={50} // Adjust the radius as needed
+            fillColor="rgba(0, 0, 255, 0.5)" // Blue color with transparency
+            strokeColor="rgba(0, 0, 255, 1)" // Blue color without transparency
+          />
+        )}
+
         {/* Add markers for each place */}
         {places.map((place) => (
-        <Marker
-        key={place.id} // Use a unique key, e.g., place.id
-        coordinate={{
-          latitude: place.Place.latitude,
-          longitude: place.Place.longitude,
-        }}
-        title={place.Name}
-        description={place.Description}
-        onPress={() => setSelectedPlace(place)} // Handle marker press
-
-      >
-        {/* Use the Image component to set a custom icon */}
-        <Image source={require('../assets/location-pin.png')} style={{ width: 40, height: 40 }} />
-      </Marker>
-          
-          
+          <Marker
+            key={place.id}
+            coordinate={{
+              latitude: place.Place.latitude,
+              longitude: place.Place.longitude,
+            }}
+            title={place.Name}
+            description={place.Description}
+            onPress={() => setSelectedPlace(place)}
+          >
+            <Image
+              source={require("../assets/location-pin.png")}
+              style={{ width: 40, height: 40 }}
+            />
+          </Marker>
         ))}
       </MapView>
       {selectedPlace && (
         <Card style={styles.card}>
-          <Card.Cover
-            source={require("../assets/Cross.jpeg")} // Add a background image for the card
-            style={styles.cardCover}
-          />
-          <Card.Content>
-            <Title style={styles.cardTitle}>{selectedPlace.Name}</Title>
-            <Paragraph style={styles.cardText}>
-              Description: {selectedPlace.Description}
-            </Paragraph>
-            <Paragraph style={styles.cardText}>
-              Category: {selectedPlace.Category}
-            </Paragraph>
-            <Paragraph style={styles.cardText}>
-              Niveau: {selectedPlace.Niveau}
-            </Paragraph>
-          </Card.Content>
+          {/* ... (previous code) */}
         </Card>
       )}
     </View>
   );
 };
 
+  
 const styles = StyleSheet.create({
   container: {
     flex: 1,

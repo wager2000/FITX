@@ -19,11 +19,13 @@
       "bundleIdentifier": "com.wager2000.FITX"
     },
     "android": {
+
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.wager2000.FITX"
+      
     },
     "web": {
       "favicon": "./assets/favicon.png"

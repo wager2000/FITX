@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,8 +6,10 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  Platform
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import * as Location from "expo-location";
 
 // Define an array of button properties
 const buttons = [
@@ -65,6 +67,33 @@ const buttons = [
 
 const Startscreen = () => {
   const navigation = useNavigation();
+  const [userLocation, setUserLocation] = useState(null);
+
+  useEffect(() => {
+    const getLocation = async () => {
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          console.error("Location permission denied");
+          return;
+        }
+    
+        const location = await Location.getCurrentPositionAsync({});
+        console.log("User location:", location.coords);
+        setUserLocation(location.coords);
+      } catch (error) {
+        console.error("Error getting location: ", error);
+      }
+    };
+
+    const timer = setTimeout(() => {
+      getLocation();
+    }, 10000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
 
   const handleButtonPress = (button) => {
     if (button.text === "Settings") {
