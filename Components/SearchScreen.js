@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TextInput, Text } from "react-native";
+import { View, StyleSheet, TextInput, Button, Text } from "react-native";
 import MapView, { Marker, Circle } from "react-native-maps";
 import { collection, getDocs, query, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
@@ -13,7 +13,7 @@ const SearchScreen = () => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
-  const [radius, setRadius] = useState(500); // Initial radius in meters
+  const [radius, setRadius] = useState(1000); // Initial radius in meters
 
   useEffect(() => {
     // Create a reference to the "Places" collection
@@ -51,9 +51,14 @@ const SearchScreen = () => {
     };
   }, []);
 
-  const handleRadiusChange = (newRadius) => {
-    // Update the radius when the user changes it
-    setRadius(newRadius);
+  const handleZoom = (value) => {
+    // Update the radius when the slider value changes
+    setRadius(value);
+  };
+
+  const handleRegionChange = (newRegion) => {
+    // Update the map's region
+    setRegion(newRegion);
   };
 
   return (
@@ -67,7 +72,8 @@ const SearchScreen = () => {
       </View>
       <MapView
         style={styles.map}
-        region={region} // Use the dynamic region
+        region={region}
+        onRegionChange={handleRegionChange} // Update the region when it changes
       >
         {/* Add markers for each place */}
         {places.map((place) => (
@@ -79,29 +85,38 @@ const SearchScreen = () => {
             }}
             title={place.Name}
             description={place.Description}
+            pinColor={
+              // Check if the marker is inside the circle
+              region &&
+              place.Place.latitude &&
+              place.Place.longitude &&
+              Math.sqrt(
+                Math.pow(region.latitude - place.Place.latitude, 2) +
+                  Math.pow(region.longitude - place.Place.longitude, 2)
+              ) * 100000 <= radius
+                ? "green"
+                : "red"
+            }
           />
         ))}
-        {/* Add a Circle to represent the radius */}
+
+        {/* Add a circle */}
         <Circle
-          center={{
-            latitude: region.latitude,
-            longitude: region.longitude,
-          }}
-          radius={radius}
-          fillColor="rgba(0, 0, 255, 0.2)"
-          strokeColor="blue"
+          center={region}
+          radius={radius} // Use the dynamic radius
+          fillColor="rgba(0, 0, 255, 0.2)" // Adjust fill color as needed
+          strokeColor="rgba(0, 0, 255, 0.5)" // Adjust stroke color as needed
         />
       </MapView>
-      {/* Display the radius value */}
-      <View style={styles.radiusContainer}>
-        <Text style={styles.radiusText}>Radius: {radius} meters</Text>
+      <View style={styles.sliderContainer}>
+        <Text>Radius: {radius} meters</Text>
         <Slider
-          style={styles.radiusSlider}
-          step={100}
+          style={styles.slider}
           minimumValue={100}
-          maximumValue={2000}
+          maximumValue={5000}
+          step={100}
           value={radius}
-          onValueChange={handleRadiusChange}
+          onValueChange={handleZoom}
         />
       </View>
     </View>
@@ -127,21 +142,21 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-  radiusContainer: {
+  sliderContainer: {
     position: "absolute",
     bottom: 16,
+    left: 16,
     right: 16,
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
-    borderRadius: 4,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
     padding: 8,
+    elevation: 4,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
   },
-  radiusText: {
-    fontWeight: "bold",
-    marginBottom: 4,
-  },
-  radiusSlider: {
-    width: 200,
+  slider: {
+    flex: 1,
   },
 });
 
