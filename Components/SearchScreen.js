@@ -113,7 +113,7 @@ const SearchScreen = () => {
         <Slider
           style={styles.slider}
           minimumValue={100}
-          maximumValue={5000}
+          maximumValue={10000}
           step={100}
           value={radius}
           onValueChange={handleZoom}
