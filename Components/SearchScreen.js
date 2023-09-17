@@ -4,6 +4,7 @@ import MapView, { Marker, Circle } from "react-native-maps";
 import { collection, getDocs, query, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import Slider from "@react-native-community/slider";
+import axios from 'axios';
 
 const SearchScreen = () => {
   const [places, setPlaces] = useState([]);
@@ -40,7 +41,8 @@ const SearchScreen = () => {
       const placesData = querySnapshot.docs.map((doc) => {
         const data = doc.data();
         const id = doc.id; // Retrieve the unique ID
-        return { id, ...data };
+        const niveau = data.Niveau; // Add this line to get the "Niveau" field
+        return { id, ...data, niveau };
       });
 
       setPlaces(placesData);
@@ -84,27 +86,28 @@ const SearchScreen = () => {
         {/* Add markers for each place */}
         {places.map((place) => (
           <Marker
-            key={place.id}
-            coordinate={{
-              latitude: place.Place.latitude,
-              longitude: place.Place.longitude,
-            }}
-            title={place.Name}
-            description={place.Description}
-            pinColor={
-              // Check if the marker is inside the circle
-              region &&
-              place.Place.latitude &&
-              place.Place.longitude &&
-              Math.sqrt(
-                Math.pow(region.latitude - place.Place.latitude, 2) +
-                  Math.pow(region.longitude - place.Place.longitude, 2)
-              ) * 100000 <= radius
-                ? "green"
-                : "red"
-            }
-            onPress={() => handleMarkerPress(place)} // Handle marker press
-          />
+          key={place.id}
+          coordinate={{
+            latitude: place.Place.latitude,
+            longitude: place.Place.longitude,
+          }}
+          title={`${place.Name} - Niveau: ${place.niveau}`}
+          description={place.Description}
+          pinColor={
+            // Check if the marker is inside the circle
+            region &&
+            place.Place.latitude &&
+            place.Place.longitude &&
+            Math.sqrt(
+              Math.pow(region.latitude - place.Place.latitude, 2) +
+                Math.pow(region.longitude - place.Place.longitude, 2)
+            ) * 100000 <= radius
+              ? "green"
+              : "red"
+          }
+          onPress={() => handleMarkerPress(place)} // Handle marker press
+        />
+        
         ))}
 
         {/* Add a circle */}
@@ -131,6 +134,7 @@ const SearchScreen = () => {
         <View style={styles.selectedPinContainer}>
           <Text style={styles.selectedPinTitle}>{selectedPin.Name}</Text>
           <Text style={styles.selectedPinDescription}>{selectedPin.Description}</Text>
+          <Text style={styles.niveauText}>Niveau: {selectedPin.niveau}</Text>
         </View>
       )}
     </View>
@@ -172,17 +176,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   selectedPinContainer: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "rgba(255, 255, 255, 0.8)", // Adjust the opacity as needed
     borderTopWidth: 1,
     borderTopColor: "#DDDDDD",
     position: "absolute",
-    bottom: 64, // Adjust the position above the radius slider
+    bottom: 80, // Adjust the position above the radius slider
     left: 0,
     right: 0,
     paddingVertical: 16, // Add padding top and bottom
     paddingHorizontal: 16, // Add padding left and right
     borderRadius: 8,
-    elevation: 4,
+    elevation: 4,  
   },
   selectedPinTitle: {
     fontSize: 18, // Adjust the font size
