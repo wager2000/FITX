@@ -14,6 +14,7 @@ const SearchScreen = () => {
     longitudeDelta: 0.0421,
   });
   const [radius, setRadius] = useState(1000); // Initial radius in meters
+  const [selectedPin, setSelectedPin] = useState(null); // Store details of the selected pin
 
   useEffect(() => {
     // Create a reference to the "Places" collection
@@ -61,6 +62,11 @@ const SearchScreen = () => {
     setRegion(newRegion);
   };
 
+  const handleMarkerPress = (pin) => {
+    // Set the selected pin's details
+    setSelectedPin(pin);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
@@ -97,6 +103,7 @@ const SearchScreen = () => {
                 ? "green"
                 : "red"
             }
+            onPress={() => handleMarkerPress(place)} // Handle marker press
           />
         ))}
 
@@ -119,6 +126,13 @@ const SearchScreen = () => {
           onValueChange={handleZoom}
         />
       </View>
+      {/* Display selected pin's details */}
+      {selectedPin && (
+        <View style={styles.selectedPinContainer}>
+          <Text style={styles.selectedPinTitle}>{selectedPin.Name}</Text>
+          <Text style={styles.selectedPinDescription}>{selectedPin.Description}</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -130,8 +144,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     padding: 16,
     backgroundColor: "#FFFFFF",
-    borderBottomWidth: 1,
-    borderBottomColor: "#DDDDDD",
+
   },
   searchInput: {
     height: 40,
@@ -158,6 +171,27 @@ const styles = StyleSheet.create({
   slider: {
     flex: 1,
   },
+  selectedPinContainer: {
+    backgroundColor: "#FFFFFF",
+    borderTopWidth: 1,
+    borderTopColor: "#DDDDDD",
+    position: "absolute",
+    bottom: 64, // Adjust the position above the radius slider
+    left: 0,
+    right: 0,
+    paddingVertical: 16, // Add padding top and bottom
+    paddingHorizontal: 16, // Add padding left and right
+    borderRadius: 8,
+    elevation: 4,
+  },
+  selectedPinTitle: {
+    fontSize: 18, // Adjust the font size
+    fontWeight: "bold", // Add bold font weight
+  },
+  selectedPinDescription: {
+    fontSize: 14, // Adjust the font size
+    marginTop: 8, // Add margin to separate from the title
+  }
 });
 
 export default SearchScreen;
