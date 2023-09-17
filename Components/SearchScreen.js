@@ -145,9 +145,24 @@ const SearchScreen = () => {
         ))}
       </MapView>
       {selectedPlace && (
-        <Card style={styles.card}>
-          {/* ... (previous code) */}
-        </Card>
+         <Card style={styles.card}>
+         <Card.Cover
+           source={require("../assets/Cross.jpeg")} // Add a background image for the card
+           style={styles.cardCover}
+         />
+         <Card.Content>
+           <Title style={styles.cardTitle}>{selectedPlace.Name}</Title>
+           <Paragraph style={styles.cardText}>
+             Description: {selectedPlace.Description}
+           </Paragraph>
+           <Paragraph style={styles.cardText}>
+             Category: {selectedPlace.Category}
+           </Paragraph>
+           <Paragraph style={styles.cardText}>
+             Niveau: {selectedPlace.Niveau}
+           </Paragraph>
+         </Card.Content>
+       </Card>
       )}
     </View>
   );
