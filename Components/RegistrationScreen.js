@@ -7,7 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Image,
+  ImageBackground,
 } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
@@ -26,7 +26,7 @@ const RegistrationScreen = () => {
       const userRef = collection(db, "users");
       const userData = {
         Email: email,
-        Password: password
+        Password: password,
         // Add other user data as needed
       };
 
@@ -53,15 +53,17 @@ const RegistrationScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={styles.backgroundImageContainer}>
-        <Image
-          source={require("../assets/pexels-photo-4662357.jpeg")} // Replace with your image file
-          style={styles.backgroundImage}
-        />
-      </View>
-      <View style={styles.formContainer}>
-        <View style={styles.inputContainer}>
+    <ImageBackground
+      source={require("../assets/pexels-photo-4662357.jpeg")} // Replace with your image file
+      style={styles.container}
+    >
+      <KeyboardAvoidingView
+        style={styles.overlay}
+        behavior="padding"
+        contentContainerStyle={styles.contentContainer}
+      >
+        <Text style={styles.headerText}>Welcome to User Registration</Text>
+        <View style={styles.formContainer}>
           <TextInput
             placeholder="Email"
             value={email}
@@ -75,53 +77,51 @@ const RegistrationScreen = () => {
             style={styles.input}
             secureTextEntry
           />
-          <Text>
+          <TouchableOpacity onPress={handleSignUp} style={styles.button}>
+            <Text style={styles.buttonText}>Register</Text>
+          </TouchableOpacity>
+          <Text style={styles.loginText}>
             If you already have a user, click{" "}
-            <Text style={styles.loginLinkText} onPress={handleLoginLinkPress}>
+            <Text
+              style={styles.loginLinkText}
+              onPress={handleLoginLinkPress}
+            >
               here
             </Text>
           </Text>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={handleSignUp} style={styles.button}>
-            <Text style={styles.buttonText}>Register</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 };
-
-export default RegistrationScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.4)", // Add a semi-transparent black overlay
     justifyContent: "center",
     alignItems: "center",
   },
-  backgroundImageContainer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+  contentContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
   },
-  backgroundImage: {
-    flex: 1,
-    width: undefined,
-    height: undefined,
-    resizeMode: "cover",
+  headerText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+    marginBottom: 20,
   },
   formContainer: {
     width: "80%",
     backgroundColor: "rgba(255, 255, 255, 0.8)", // Add a semi-transparent white background
     borderRadius: 10,
     padding: 20,
-    alignItems: "center",
-  },
-  inputContainer: {
-    width: "100%",
   },
   input: {
     backgroundColor: "white",
@@ -130,26 +130,28 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 5,
   },
-  buttonContainer: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 10,
-  },
   button: {
     backgroundColor: "#0782F9",
     width: "100%",
     padding: 10,
     borderRadius: 10,
     alignItems: "center",
+    marginTop: 10,
   },
   buttonText: {
     color: "white",
     fontWeight: "700",
     fontSize: 16,
   },
+  loginText: {
+    marginTop: 10,
+    textAlign: "center",
+    color: "white",
+  },
   loginLinkText: {
     color: "#0782F9",
     textDecorationLine: "underline",
   },
 });
+
+export default RegistrationScreen;
