@@ -26,6 +26,7 @@ const RegistrationScreen = () => {
       const userRef = collection(db, "users");
       const userData = {
         Email: email,
+        Password: password
         // Add other user data as needed
       };
 
@@ -37,6 +38,7 @@ const RegistrationScreen = () => {
         .then((userCredentials) => {
           const user = userCredentials.user;
           console.log("Registered with:", user.email);
+          console.log("Password with:", user.password);
           // You can navigate to the home screen or any other screen after registration.
           navigation.replace("Home");
         })
