@@ -7,13 +7,11 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
-import {
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
-
 import { auth } from "../firebaseConfig";
 
 const RegistrationScreen = () => {
@@ -48,28 +46,45 @@ const RegistrationScreen = () => {
     }
   };
 
+  const handleLoginLinkPress = () => {
+    navigation.navigate("Login"); // Replace "Login" with the name of your login screen
+  };
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.input}
-          secureTextEntry
+      <View style={styles.backgroundImageContainer}>
+        <Image
+          source={require("../assets/pexels-photo-4662357.jpeg")} // Replace with your image file
+          style={styles.backgroundImage}
         />
       </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleSignUp} style={styles.button}>
-          <Text style={styles.buttonText}>Register</Text>
-        </TouchableOpacity>
+      <View style={styles.formContainer}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            style={styles.input}
+            secureTextEntry
+          />
+          <Text>
+            If you already have a user, click{" "}
+            <Text style={styles.loginLinkText} onPress={handleLoginLinkPress}>
+              here
+            </Text>
+          </Text>
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={handleSignUp} style={styles.button}>
+            <Text style={styles.buttonText}>Register</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </KeyboardAvoidingView>
   );
@@ -83,8 +98,28 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  inputContainer: {
+  backgroundImageContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  backgroundImage: {
+    flex: 1,
+    width: undefined,
+    height: undefined,
+    resizeMode: "cover",
+  },
+  formContainer: {
     width: "80%",
+    backgroundColor: "rgba(255, 255, 255, 0.8)", // Add a semi-transparent white background
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+  },
+  inputContainer: {
+    width: "100%",
   },
   input: {
     backgroundColor: "white",
@@ -94,7 +129,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   buttonContainer: {
-    width: "60%",
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
@@ -110,5 +145,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "700",
     fontSize: 16,
+  },
+  loginLinkText: {
+    color: "#0782F9",
+    textDecorationLine: "underline",
   },
 });
