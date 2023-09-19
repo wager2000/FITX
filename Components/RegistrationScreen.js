@@ -54,7 +54,7 @@ const RegistrationScreen = () => {
 
   return (
     <ImageBackground
-      source={require("../assets/pexels-photo-4662357.jpeg")} // Replace with your image file
+      source={require("../assets/livet.jpeg")} // Replace with your image file
       style={styles.container}
     >
       <KeyboardAvoidingView
