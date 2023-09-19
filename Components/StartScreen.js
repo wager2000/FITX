@@ -182,6 +182,18 @@ const Startscreen = () => {
             />
             <Text style={styles.bottomBarButtonText}>Settings</Text>
           </View>
+          <TouchableOpacity
+  style={styles.bottomBarButton}
+  onPress={() => navigation.navigate("Registration")} // Change "Registration" to the name of your Registration screen
+>
+  <View style={styles.buttonIconContainer}>
+    <Image
+      source={require("../assets/settings.png")} // You may want to change this image
+      style={styles.buttonIcon}
+    />
+    <Text style={styles.bottomBarButtonText}>Registration</Text>
+  </View>
+</TouchableOpacity>
         </TouchableOpacity>
       </View>
     </View>
@@ -262,5 +274,6 @@ const styles = StyleSheet.create({
   },
   bottomBarButton5: {},
 });
+
 
 export default Startscreen;

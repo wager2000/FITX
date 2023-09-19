@@ -7,6 +7,7 @@ import SearchScreen from "./Components/SearchScreen";
 import SettingsScreen from "./Components/Settings";
 import HomeScreen from "./Components/HomeScreen";
 import LoginScreen from "./Components/LoginScreen";
+import RegistrationScreen from "./Components/RegistrationScreen";
 
 import { AppRegistry } from "react-native";
 
@@ -31,6 +32,7 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="Search" component={SearchScreen} />
+        <Stack.Screen name="Registration" component={RegistrationScreen}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
