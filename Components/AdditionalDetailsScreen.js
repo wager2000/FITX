@@ -11,17 +11,16 @@ import {
 } from "react-native";
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
+import { auth } from "../firebaseConfig"; // Import the auth object
 
 const AdditionalDetailsScreen = ({ route }) => {
   const [interests, setInterests] = useState("");
   const navigation = useNavigation();
 
- //const { userId } = route.params; // Get the user ID passed from RegistrationScreen
-
   const handleSaveDetails = async () => {
     try {
-      // Update user's interests in Firestore
-      const userDocRef = doc(db, "users");
+      // Update the currently authenticated user's interests in Firestore
+      const userDocRef = doc(db, "users", auth.currentUser.uid); // Use auth.currentUser.uid to get the user's ID
       await updateDoc(userDocRef, {
         Interests: interests.split(",").map((interest) => interest.trim()), // Store interests as an array
         // Add other additional details as needed
