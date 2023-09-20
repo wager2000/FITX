@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TextInput, Button, Text } from "react-native";
-import MapView, { Marker, Circle } from "react-native-maps";
-import { collection, getDocs, query, onSnapshot } from "firebase/firestore";
+import { View, StyleSheet, TextInput, Button, Image } from "react-native";
+import MapView, { Marker, Circle } from "react-native-maps"; // Import Circle component
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
-import Slider from "@react-native-community/slider";
-import axios from 'axios';
+import { Card, Title, Paragraph } from "react-native-paper";
+import * as Location from "expo-location";
 
 const SearchScreen = () => {
   const [places, setPlaces] = useState([]);
-  const [region, setRegion] = useState({
-    latitude: 55.6761,
-    longitude: 12.5683,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [userLocation, setUserLocation] = useState(null); // Store user's location
+  const [initialRegion, setInitialRegion] = useState({
+    latitude: 55.6761, // Default latitude if user location is not available
+    longitude: 12.5683, // Default longitude if user location is not available
+    latitudeDelta: 0.02, // Smaller value for closer zoom
+    longitudeDelta: 0.02, // Smaller value for closer zoom
   });
-  const [radius, setRadius] = useState(1000); // Initial radius in meters
-  const [selectedPin, setSelectedPin] = useState(null); // Store details of the selected pin
 
   useEffect(() => {
     // Create a reference to the "Places" collection
@@ -41,8 +42,7 @@ const SearchScreen = () => {
       const placesData = querySnapshot.docs.map((doc) => {
         const data = doc.data();
         const id = doc.id; // Retrieve the unique ID
-        const niveau = data.Niveau; // Add this line to get the "Niveau" field
-        return { id, ...data, niveau };
+        return { id, ...data };
       });
 
       setPlaces(placesData);
@@ -54,20 +54,48 @@ const SearchScreen = () => {
     };
   }, []);
 
-  const handleZoom = (value) => {
-    // Update the radius when the slider value changes
-    setRadius(value);
+  // Function to handle the search and focus on the selected place
+  const handleSearch = () => {
+    const placeToSearch = searchQuery.trim();
+    const selected = places.find((place) => place.Name === placeToSearch);
+    if (selected) {
+      setSelectedPlace(selected);
+    } else {
+      setSelectedPlace(null);
+      // Handle case when the place is not found
+    }
   };
 
-  const handleRegionChange = (newRegion) => {
-    // Update the map's region
-    setRegion(newRegion);
-  };
+  // Get the user's location on component mount
+  useEffect(() => {
+    const getLocation = async () => {
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          console.error("Location permission denied");
+          return;
+        }
 
-  const handleMarkerPress = (pin) => {
-    // Set the selected pin's details
-    setSelectedPin(pin);
-  };
+        const location = await Location.getCurrentPositionAsync({});
+        console.log("User location:", location.coords);
+        setUserLocation(location.coords);
+
+        // Update the initial region with the user's location
+        if (location.coords) {
+          setInitialRegion({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.02,
+            longitudeDelta: 0.02,
+          });
+        }
+      } catch (error) {
+        console.error("Error getting location: ", error);
+      }
+    };
+
+    getLocation();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -75,127 +103,129 @@ const SearchScreen = () => {
         <TextInput
           style={styles.searchInput}
           placeholder="Search"
-          // You can add onChangeText and value props to handle search functionality
+          onChangeText={(text) => setSearchQuery(text)}
+          value={searchQuery}
         />
+        <Button title="Search" onPress={handleSearch} />
       </View>
       <MapView
         style={styles.map}
-        region={region}
-        onRegionChange={handleRegionChange} // Update the region when it changes
+        region={initialRegion}
       >
+        {/* Add a Circle component for the user's location */}
+        {userLocation && (
+          <Circle
+            center={{
+              latitude: userLocation.latitude,
+              longitude: userLocation.longitude,
+            }}
+            radius={50} // Adjust the radius as needed
+            fillColor="rgba(0, 0, 255, 0.5)" // Blue color with transparency
+            strokeColor="rgba(0, 0, 255, 1)" // Blue color without transparency
+          />
+        )}
+
         {/* Add markers for each place */}
         {places.map((place) => (
           <Marker
-          key={place.id}
-          coordinate={{
-            latitude: place.Place.latitude,
-            longitude: place.Place.longitude,
-          }}
-          title={`${place.Name} - Niveau: ${place.niveau}`}
-          description={place.Description}
-          pinColor={
-            // Check if the marker is inside the circle
-            region &&
-            place.Place.latitude &&
-            place.Place.longitude &&
-            Math.sqrt(
-              Math.pow(region.latitude - place.Place.latitude, 2) +
-                Math.pow(region.longitude - place.Place.longitude, 2)
-            ) * 100000 <= radius
-              ? "green"
-              : "red"
-          }
-          onPress={() => handleMarkerPress(place)} // Handle marker press
-        />
-        
+            key={place.id}
+            coordinate={{
+              latitude: place.Place.latitude,
+              longitude: place.Place.longitude,
+            }}
+            title={place.Name}
+            description={place.Description}
+            onPress={() => setSelectedPlace(place)}
+          >
+            <Image
+              source={require("../assets/location-pin.png")}
+              style={{ width: 40, height: 40 }}
+            />
+          </Marker>
         ))}
-
-        {/* Add a circle */}
-        <Circle
-          center={region}
-          radius={radius} // Use the dynamic radius
-          fillColor="rgba(0, 0, 255, 0.2)" // Adjust fill color as needed
-          strokeColor="rgba(0, 0, 255, 0.5)" // Adjust stroke color as needed
-        />
       </MapView>
-      <View style={styles.sliderContainer}>
-        <Text>Radius: {radius} meters</Text>
-        <Slider
-          style={styles.slider}
-          minimumValue={100}
-          maximumValue={10000}
-          step={100}
-          value={radius}
-          onValueChange={handleZoom}
-        />
-      </View>
-      {/* Display selected pin's details */}
-      {selectedPin && (
-        <View style={styles.selectedPinContainer}>
-          <Text style={styles.selectedPinTitle}>{selectedPin.Name}</Text>
-          <Text style={styles.selectedPinDescription}>{selectedPin.Description}</Text>
-          <Text style={styles.niveauText}>Niveau: {selectedPin.niveau}</Text>
-        </View>
+      {selectedPlace && (
+         <Card style={styles.card}>
+         <Card.Cover
+           source={require("../assets/Cross.jpeg")} // Add a background image for the card
+           style={styles.cardCover}
+         />
+         <Card.Content>
+           <Title style={styles.cardTitle}>{selectedPlace.Name}</Title>
+           <Paragraph style={styles.cardText}>
+             Description: {selectedPlace.Description}
+           </Paragraph>
+           <Paragraph style={styles.cardText}>
+             Category: {selectedPlace.Category}
+           </Paragraph>
+           <Paragraph style={styles.cardText}>
+             Niveau: {selectedPlace.Niveau}
+           </Paragraph>
+         </Card.Content>
+       </Card>
       )}
     </View>
   );
 };
 
+  
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   searchContainer: {
+    flexDirection: "row",
     padding: 16,
-    backgroundColor: "#FFFFFF",
-
+    backgroundColor: "#F0F0F0", // Background color for the search container
+    borderBottomWidth: 1,
+    borderBottomColor: "#DDDDDD",
   },
   searchInput: {
+    flex: 1,
     height: 40,
     borderColor: "gray",
     borderWidth: 1,
     paddingHorizontal: 8,
+    marginRight: 16,
+    borderRadius: 8,
+    backgroundColor: "#FFFFFF", // Background color for the search input
   },
   map: {
     flex: 1,
   },
-  sliderContainer: {
+  card: {
     position: "absolute",
     bottom: 16,
     left: 16,
     right: 16,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 8,
-    padding: 8,
     elevation: 4,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  slider: {
-    flex: 1,
-  },
-  selectedPinContainer: {
-    backgroundColor: "rgba(255, 255, 255, 0.8)", // Adjust the opacity as needed
-    borderTopWidth: 1,
-    borderTopColor: "#DDDDDD",
-    position: "absolute",
-    bottom: 80, // Adjust the position above the radius slider
-    left: 0,
-    right: 0,
-    paddingVertical: 16, // Add padding top and bottom
-    paddingHorizontal: 16, // Add padding left and right
     borderRadius: 8,
-    elevation: 4,  
+    backgroundColor: "#FFFFFF",
+    padding: 16,
   },
-  selectedPinTitle: {
-    fontSize: 18, // Adjust the font size
-    fontWeight: "bold", // Add bold font weight
+  cardCover: {
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    height: 150,
   },
-  selectedPinDescription: {
-    fontSize: 14, // Adjust the font size
-    marginTop: 8, // Add margin to separate from the title
-  }
+  cardTitle: {
+    fontSize: 24,
+    marginBottom: 8,
+    color: "#333333", // Text color for the title
+  },
+  cardText: {
+    fontSize: 16,
+    marginBottom: 4,
+    color: "#666666", // Text color for description, category, and niveau
+  },
+  cardCategory: {
+    color: "#007AFF", // Text color for the category
+    fontWeight: "bold",
+  },
+  cardNiveau: {
+    color: "#4CAF50", // Text color for the niveau
+    fontWeight: "bold",
+  },
 });
 
 export default SearchScreen;
