@@ -16,12 +16,12 @@ const AdditionalDetailsScreen = ({ route }) => {
   const [interests, setInterests] = useState("");
   const navigation = useNavigation();
 
-  const { userId } = route.params; // Get the user ID passed from RegistrationScreen
+ //const { userId } = route.params; // Get the user ID passed from RegistrationScreen
 
   const handleSaveDetails = async () => {
     try {
       // Update user's interests in Firestore
-      const userDocRef = doc(db, "users", userId);
+      const userDocRef = doc(db, "users");
       await updateDoc(userDocRef, {
         Interests: interests.split(",").map((interest) => interest.trim()), // Store interests as an array
         // Add other additional details as needed
