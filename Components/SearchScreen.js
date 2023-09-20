@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TextInput, Button, Image } from "react-native";
+import { View, StyleSheet, TextInput, Button, Image, Slider } from "react-native";
 import MapView, { Marker, Circle } from "react-native-maps"; // Import Circle component
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
@@ -143,6 +143,7 @@ const SearchScreen = () => {
             />
           </Marker>
         ))}
+        
       </MapView>
       {selectedPlace && (
          <Card style={styles.card}>
