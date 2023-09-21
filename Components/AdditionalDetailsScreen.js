@@ -11,27 +11,28 @@ import {
 } from "react-native";
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
-import { auth } from "../firebaseConfig"; // Import the auth object
 
 const AdditionalDetailsScreen = ({ route }) => {
   const [interests, setInterests] = useState("");
   const navigation = useNavigation();
 
-  const handleSaveDetails = async () => {
-    try {
-      // Update the currently authenticated user's interests in Firestore
-      const userDocRef = doc(db, "users", auth.currentUser.uid); // Use auth.currentUser.uid to get the user's ID
-      await updateDoc(userDocRef, {
-        Interests: interests.split(",").map((interest) => interest.trim()), // Store interests as an array
-        // Add other additional details as needed
-      });
+ //const { userId } = route.params; // Get the user ID passed from RegistrationScreen
 
-      // After saving details, navigate to the HomeScreen or any other screen
-      navigation.replace("Home");
-    } catch (error) {
-      console.error("Error updating document: ", error);
-    }
-  };
+ const handleSaveDetails = async () => {
+  try {
+    // Update the currently authenticated user's interests in Firestore
+    const userDocRef = doc(db, "users", auth.currentUser.uid);
+    await updateDoc(userDocRef, {
+      Interests: interests.split(",").map((interest) => interest.trim()), // Store interests as an array
+      // Add other additional details as needed
+    });
+
+    // After saving details, navigate to the HomeScreen or any other screen
+    navigation.replace("Home");
+  } catch (error) {
+    console.error("Error updating document: ", error);
+  }
+};
 
   return (
     <KeyboardAvoidingView
