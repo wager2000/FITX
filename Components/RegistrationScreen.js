@@ -8,15 +8,18 @@ import {
   TouchableOpacity,
   View,
   ImageBackground,
+  ScrollView,
 } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { auth } from "../firebaseConfig";
+import { CheckBox } from "react-native-elements";
 
 const RegistrationScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [interests, setInterests] = useState([]);
 
   const navigation = useNavigation();
 
@@ -27,7 +30,7 @@ const RegistrationScreen = () => {
       const userData = {
         Email: email,
         Password: password,
-        // Add other user data as needed
+        Interest: interests,
       };
 
       const docRef = await addDoc(userRef, userData);
@@ -39,6 +42,7 @@ const RegistrationScreen = () => {
           const user = userCredentials.user;
           console.log("Registered with:", user.email);
           console.log("Password with:", user.password);
+          console.log("Interests:", user.interests);
           // You can navigate to the home screen or any other screen after registration.
           navigation.replace("Home");
         })
@@ -49,12 +53,12 @@ const RegistrationScreen = () => {
   };
 
   const handleLoginLinkPress = () => {
-    navigation.navigate("Login"); // Replace "Login" with the name of your login screen
+    navigation.navigate("Login");
   };
 
   return (
     <ImageBackground
-      source={require("../assets/livet.jpeg")} // Replace with your image file
+      source={require("../assets/livet.jpeg")}
       style={styles.container}
     >
       <KeyboardAvoidingView
@@ -62,38 +66,56 @@ const RegistrationScreen = () => {
         behavior="padding"
         contentContainerStyle={styles.contentContainer}
       >
-        <Text style={styles.headerText}>Welcome to User Registration</Text>
-        <View style={styles.formContainer}>
-          <TextInput
-            placeholder="Email"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Password"
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            style={styles.input}
-            secureTextEntry
-          />
-          <TouchableOpacity onPress={handleSignUp} style={styles.button}>
-            <Text style={styles.buttonText}>Register</Text>
-          </TouchableOpacity>
-          <Text style={styles.loginText}>
-            If you already have a user, click{" "}
-            <Text
-              style={styles.loginLinkText}
-              onPress={handleLoginLinkPress}
-            >
-              here
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <Text style={styles.headerText}>Welcome to User Registration</Text>
+          <View style={styles.formContainer}>
+            <TextInput
+              placeholder="Email"
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Password"
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+              style={styles.input}
+              secureTextEntry
+            />
+            <Text style={styles.label}>Interests:</Text>
+            {interestOptions.map((option) => (
+              <CheckBox
+                key={option}
+                title={option}
+                checked={interests.includes(option)}
+                onPress={() =>
+                  setInterests((prevInterests) =>
+                    prevInterests.includes(option)
+                      ? prevInterests.filter((interest) => interest !== option)
+                      : [...prevInterests, option]
+                  )
+                }
+                containerStyle={styles.checkBoxContainer}
+                textStyle={styles.checkBoxText}
+              />
+            ))}
+            <TouchableOpacity onPress={handleSignUp} style={styles.button}>
+              <Text style={styles.buttonText}>Register</Text>
+            </TouchableOpacity>
+            <Text style={styles.loginText}>
+              If you already have a user, click{" "}
+              <Text style={styles.loginLinkText} onPress={handleLoginLinkPress}>
+                here
+              </Text>
             </Text>
-          </Text>
-        </View>
+          </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </ImageBackground>
   );
 };
+
+const interestOptions = ["Soccer", "Yoga", "Pilates", "Other"];
 
 const styles = StyleSheet.create({
   container: {
@@ -103,11 +125,15 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.4)", // Add a semi-transparent black overlay
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
     justifyContent: "center",
     alignItems: "center",
   },
   contentContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+  },
+  scrollContainer: {
     flexGrow: 1,
     justifyContent: "center",
   },
@@ -116,19 +142,37 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
     marginBottom: 20,
+    textAlign: "center",
   },
   formContainer: {
     width: "80%",
-    backgroundColor: "rgba(255, 255, 255, 0.8)", // Add a semi-transparent white background
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
     borderRadius: 10,
     padding: 20,
+    alignItems: "center",
   },
   input: {
     backgroundColor: "white",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
+    marginTop: 10,
+    width: "100%",
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+  checkBoxContainer: {
+    backgroundColor: "transparent",
+    borderWidth: 0,
+    margin: 0,
+    padding: 0,
     marginTop: 5,
+  },
+  checkBoxText: {
+    fontSize: 16,
   },
   button: {
     backgroundColor: "#0782F9",
@@ -136,7 +180,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 20,
   },
   buttonText: {
     color: "white",
