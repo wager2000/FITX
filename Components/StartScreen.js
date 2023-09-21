@@ -191,7 +191,8 @@ const Startscreen = () => {
             <Text style={styles.bottomBarButtonText}>Favorite</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomBarButton}>
+        <TouchableOpacity style={styles.bottomBarButton}
+        onPress={() => navigation.navigate("History")}>
           <View style={styles.buttonIconContainer}>
             <Image
               source={require("../assets/file.png")}

@@ -8,6 +8,9 @@ import SettingsScreen from "./Components/Settings";
 import AdditionalDetailsScreen from "./Components/AdditionalDetailsScreen";
 import LoginScreen from "./Components/LoginScreen";
 import RegistrationScreen from "./Components/RegistrationScreen";
+import HistoryScreen from "./Components/History";
+import KommendeArrangementer from "./Components/kommendeArrangementer";
+import AfsluttedeArrangementer from "./Components/afsluttedeArrangementer";
 
 import { AppRegistry } from "react-native";
 
@@ -36,6 +39,11 @@ export default function App() {
         <Stack.Screen name="Home" component={AdditionalDetailsScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="Search" component={SearchScreen} />
+        <Stack.Screen name="History" component={HistoryScreen} />
+        <Stack.Screen name="Afsluttede Arrangementer" component={AfsluttedeArrangementer} />
+        <Stack.Screen name="Kommende Arrangementer" component={KommendeArrangementer} />
+
+
 
       </Stack.Navigator>
     </NavigationContainer>
