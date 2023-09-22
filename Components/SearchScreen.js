@@ -17,6 +17,7 @@ const SearchScreen = () => {
     latitudeDelta: 0.02, // Smaller value for closer zoom
     longitudeDelta: 0.02, // Smaller value for closer zoom
   });
+  const [selectedPlaceCoordinates, setSelectedPlaceCoordinates] = useState(null); // New state variable
 
   useEffect(() => {
     // Create a reference to the "Places" collection
@@ -60,8 +61,13 @@ const SearchScreen = () => {
     const selected = places.find((place) => place.Name === placeToSearch);
     if (selected) {
       setSelectedPlace(selected);
+      setSelectedPlaceCoordinates({
+        latitude: selected.Place.latitude,
+        longitude: selected.Place.longitude,
+      });
     } else {
       setSelectedPlace(null);
+      setSelectedPlaceCoordinates(null);
       // Handle case when the place is not found
     }
   };
@@ -95,7 +101,7 @@ const SearchScreen = () => {
     };
 
     getLocation();
-  }, []);
+  }, [searchQuery, places]);
 
   return (
     <View style={styles.container}>
@@ -110,7 +116,12 @@ const SearchScreen = () => {
       </View>
       <MapView
         style={styles.map}
-        region={initialRegion}
+        region={selectedPlaceCoordinates || initialRegion}
+        onPress={() => {
+          // Clear the selected place when the map is clicked
+          setSelectedPlace(null);
+          setSelectedPlaceCoordinates(null);
+        }}
       >
         {/* Add a Circle component for the user's location */}
         {userLocation && (

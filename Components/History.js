@@ -7,19 +7,19 @@ const History = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Tjek dine Arrangementer</Text>
+      <Text style={styles.header}>Check Your Sessions</Text>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('Kommende Arrangementer')}
         >
-          <Text style={styles.buttonText}>Kommende Arrangementer</Text>
+          <Text style={styles.buttonText}>Incomming Sessions</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('Afsluttede Arrangementer')}
         >
-          <Text style={styles.buttonText}>Afsluttede Arrangementer</Text>
+          <Text style={styles.buttonText}>Finished Sessions</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
   },
   header: {
