@@ -11,6 +11,7 @@ import RegistrationScreen from "./Components/RegistrationScreen";
 import HistoryScreen from "./Components/History";
 import KommendeArrangementer from "./Components/kommendeArrangementer";
 import AfsluttedeArrangementer from "./Components/afsluttedeArrangementer";
+import StackNavigator from "./Components/StackNavigator";
 
 import { AppRegistry } from "react-native";
 
