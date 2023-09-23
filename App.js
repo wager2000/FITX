@@ -10,6 +10,7 @@ import LoginScreen from "./Components/LoginScreen";
 import RegistrationScreen from "./Components/RegistrationScreen";
 
 import { AppRegistry } from "react-native";
+import HomeScreen from "./Components/HomeScreen";
 
 // AppRegistry.registerComponent('YourAppName', () => FITX);
 
@@ -19,12 +20,13 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-
+      <Stack.Screen name="Startscreen" component={HomeScreen}></Stack.Screen>
       <Stack.Screen
           options={{ headerShown: false }}
           name="Start"
           component={Startscreen}
         />
+
       <Stack.Screen name="Registration" component={RegistrationScreen}></Stack.Screen>
 
 
@@ -34,6 +36,7 @@ export default function App() {
           name="Login"
           component={LoginScreen}
         />
+
               <Stack.Screen name="Home" component={AdditionalDetailsScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="Search" component={SearchScreen} />

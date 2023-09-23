@@ -17,10 +17,13 @@ import { db } from "../firebaseConfig";
 import { auth } from "../firebaseConfig";
 import { CheckBox } from "react-native-elements";
 
+
 const RegistrationScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [interests, setInterests] = useState([]);
+  const [level, setLevel] = useState([]);
+
 
   const navigation = useNavigation();
 
@@ -32,6 +35,7 @@ const RegistrationScreen = () => {
         Email: email,
         Password: password,
         Interest: interests,
+        Level: level,
       };
 
       const docRef = await addDoc(userRef, userData);
@@ -44,8 +48,9 @@ const RegistrationScreen = () => {
           console.log("Registered with:", user.email);
           console.log("Password with:", user.password);
           console.log("Interests:", user.interests);
+          console.log("Level is:", user.level);
           // You can navigate to the home screen or any other screen after registration.
-          navigation.replace("Home");
+          navigation.replace("Login");
         })
         .catch((error) => alert(error.message));
     } catch (error) {
@@ -64,7 +69,7 @@ const RegistrationScreen = () => {
     >
       <SafeAreaView style={styles.overlay}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.headerText}>Welcome to User Registration</Text>
+          <Text style={styles.headerText}>User Registration</Text>
           <View style={styles.formContainer}>
             <TextInput
               placeholder="Email"
@@ -112,7 +117,7 @@ const RegistrationScreen = () => {
   );
 };
 
-const interestOptions = ["Soccer", "Yoga", "Pilates", "Other"];
+const interestOptions = ["Soccer", "Yoga", "Pilates", "Crossfit", "Other"];
 
 const styles = StyleSheet.create({
   container: {

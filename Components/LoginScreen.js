@@ -24,7 +24,7 @@ const LoginScreen = () => {
       .then((userCredentials) => {
         const user = userCredentials.user;
         console.log("Logged in with:", user.email);
-        navigation.replace("Home"); // Navigate to your home screen after login
+        navigation.replace("Start"); // Navigate to your home screen after login
       })
       .catch((error) => alert(error.message));
   };
