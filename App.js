@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons"; // You can replace this with your
 import Startscreen from "./Components/StartScreen";
 import SearchScreen from "./Components/SearchScreen";
 import HistoryScreen from "./Components/History";
-import StackNavigator from "./Components/StackNavigator";
+import StackNavigatorDetails from "./Components/StackNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +46,7 @@ export default function App() {
         <Tab.Screen name="Start" component={Startscreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="History" component={HistoryScreen} />
-        <Tab.Screen name="Details" component={StackNavigator} />
+        <Tab.Screen name="Details" component={StackNavigatorDetails} />
       </Tab.Navigator>
     </NavigationContainer>
   );

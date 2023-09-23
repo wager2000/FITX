@@ -13,7 +13,7 @@ const Stack = createStackNavigator()
 * Dernæst fastsættes tre Screens i Stacken. Disse er DetailsScreen, ScreenOne og ScreenTwo
 * Hver Screen har individuel Styling qf den fremviste header.
  */
-function StackNavigator() {
+function StackNavigatorDetails() {
     return (
         <Stack.Navigator
             initialRouteName="Details"
@@ -44,4 +44,4 @@ function StackNavigator() {
 }
 
 //Eksport af den funktionelle komponent, således den kan importeres i andre komponenter
-export default StackNavigator
+export default StackNavigatorDetails
