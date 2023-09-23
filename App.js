@@ -2,13 +2,40 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from "@expo/vector-icons"; // You can replace this with your preferred icon library
 import Startscreen from "./Components/StartScreen";
 import SearchScreen from "./Components/SearchScreen";
 import HistoryScreen from "./Components/History";
 import StackNavigatorDetails from "./Components/StackNavigator";
+import LoginScreen from "./Components/LoginScreen";
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+function AuthStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ headerShown: false }} // Hide the header for the login screen if needed
+      />
+      {/* Add more screens to your authentication stack if needed */}
+    </Stack.Navigator>
+  );
+}
+
+function MainTabs() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+      {/* Add more tabs as needed */}
+    </Tab.Navigator>
+  );
+}
+
 
 export default function App() {
   return (
@@ -27,7 +54,9 @@ export default function App() {
             } else if (route.name === "History") {
               iconName = focused ? "time" : "time-outline";
             } else if (route.name === "Details") {
-              iconName = focused ? "information-circle" : "information-circle-outline";
+              iconName = focused
+                ? "information-circle"
+                : "information-circle-outline";
             }
 
             // You can customize the appearance of the icons here
@@ -43,6 +72,7 @@ export default function App() {
           },
         }}
       >
+        <Tab.Screen name="LoginScreen" component={LoginScreen} />
         <Tab.Screen name="Start" component={Startscreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="History" component={HistoryScreen} />
