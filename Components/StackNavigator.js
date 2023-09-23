@@ -1,6 +1,7 @@
 import * as React from "react";
 import Billing from "./stackComponents/Billing";
 import Account from "./stackComponents/Account";
+import Settings from "./stackComponents/Settings";
 import DetailsScreen from "./DetailsScreen";
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -17,20 +18,25 @@ function StackNavigator() {
         <Stack.Navigator
             initialRouteName="Details"
         >
-            <Stack.Screen name="Details" component={DetailsScreen}
+            <Stack.Screen name="All options" component={DetailsScreen}
                           options={{
                               headerTitleAlign: 'center',
                               headerTitleStyle: {color: 'white'},
-                              headerStyle: {backgroundColor: '#ba6262'}}
+                              headerStyle: {backgroundColor: '#659EC7'}}
                           }
             />
             <Stack.Screen name="Account" component={Account} options={{
                 headerTitleStyle: { textAlign: 'right', color: 'white' },
-                headerStyle: {backgroundColor: '#62bab5'}
+                headerStyle: {backgroundColor: '#87AFC7'}
             }} />
             <Stack.Screen name="Billing" component={Billing} options={{
                 headerTitleStyle: {color: 'black'},
-                headerStyle: {backgroundColor: '#628bba'}
+                headerStyle: {backgroundColor: '#87AFC7'}
+            }}
+            />
+            <Stack.Screen name="Settings" component={Settings} options={{
+                headerTitleStyle: {color: 'black'},
+                headerStyle: {backgroundColor: '#87AFC7'}
             }}
             />
         </Stack.Navigator>

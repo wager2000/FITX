@@ -159,61 +159,8 @@ const Startscreen = () => {
         ))}
       </ScrollView>
 
-      <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.bottomBarButton}>
-          <View style={styles.buttonIconContainer}>
-            <Image
-              source={require("../assets/home.png")}
-              style={styles.buttonIcon}
-            />
-            <Text style={styles.bottomBarButtonText}>Home</Text>
-          </View>
-        </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.bottomBarButton}
-          onPress={() => navigation.navigate("Search")}
-        >
-          <View style={styles.buttonIconContainer}>
-            <Image
-              source={require("../assets/search.png")}
-              style={styles.buttonIcon}
-            />
-            <Text style={styles.bottomBarButtonText}>Search</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomBarButton}>
-          <View style={styles.buttonIconContainer}>
-            <Image
-              source={require("../assets/love.png")}
-              style={styles.buttonIcon}
-            />
-            <Text style={styles.bottomBarButtonText}>Favorite</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomBarButton}
-        onPress={() => navigation.navigate("History")}>
-          <View style={styles.buttonIconContainer}>
-            <Image
-              source={require("../assets/file.png")}
-              style={styles.buttonIcon}
-            />
-            <Text style={styles.bottomBarButtonText}>History</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.bottomBarButton5}
-          onPress={() => navigation.navigate("Details")}
-        >
-          <View style={styles.buttonIconContainer}>
-            <Image
-              source={require("../assets/settings.png")}
-              style={styles.buttonIcon}
-            />
-            <Text style={styles.bottomBarButtonText}>Details</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
+ 
     </View>
   );
 };
@@ -222,7 +169,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 100,
   },
   button: {
     backgroundColor: "#0782F9",

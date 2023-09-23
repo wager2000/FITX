@@ -9,24 +9,24 @@ function DetailsScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Hello, account name</Text>
-      <View style={styles.buttonContainer}>
+      <View style={styles.settingContainer}>
         <TouchableOpacity
-          style={styles.button}
+          style={styles.settingItem}
           onPress={() => navController(navigation, "Account")}
         >
-          <Text style={styles.buttonText}>Account</Text>
+          <Text style={styles.settingLabel}>Account</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={styles.settingItem}
           onPress={() => navController(navigation, "Billing")}
         >
-          <Text style={styles.buttonText}>Billing</Text>
+          <Text style={styles.settingLabel}>Billing</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={styles.settingItem}
           onPress={() => navController(navigation, "Settings")}
         >
-          <Text style={styles.buttonText}>Settings</Text>
+          <Text style={styles.settingLabel}>Settings</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -40,27 +40,37 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fff", // Background color
+    backgroundColor: "white", // Background color
   },
   headerText: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20, // Spacing below the header text
   },
-  buttonContainer: {
+  settingContainer: {
     width: "80%", // Adjust the width as needed
+    backgroundColor: "white", // Background color of the settings container
+    padding: 16, // Padding for the settings container
+    borderRadius: 8, // Border radius for the settings container
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5, // Shadow for Android
   },
-  button: {
+  settingItem: {
     backgroundColor: "#f0f0f0", // Light gray background
     paddingVertical: 15, // Vertical padding
     borderRadius: 8, // Border radius
-    marginBottom: 15, // Spacing between buttons
-    width: "100%", // Button width
-    alignItems: "center", // Center button content horizontally
+    marginBottom: 15, // Spacing between settings items
+    alignItems: "center", // Center setting item content horizontally
   },
-  buttonText: {
+  settingLabel: {
     color: "#333", // Dark gray text color
-    fontSize: 18, // Button text font size
-    fontWeight: "bold", // Button text font weight
+    fontSize: 18, // Setting item text font size
+    fontWeight: "bold", // Setting item text font weight
   },
 });
