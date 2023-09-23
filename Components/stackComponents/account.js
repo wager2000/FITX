@@ -10,7 +10,7 @@ import * as React from "react";
 * navigere ind til den anden screen i stackComponents
 * Slutteligt er der inkludere stylig til komponenterne
  */
-function account({navigation}) {
+function Account({navigation}) {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Screen Two!</Text>
@@ -26,7 +26,7 @@ function account({navigation}) {
     );
 }
 //Eksport af Screen således den kan importeres- og bruges i andres komponenter
-export default account
+export default Account
 
 //Lokal styling til brug i account
 const styles = StyleSheet.create({

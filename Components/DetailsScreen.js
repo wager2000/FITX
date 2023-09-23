@@ -1,49 +1,66 @@
-import {Button, StyleSheet, Text, View} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import * as React from "react";
 
-/*
-* Metode til at navigere på baggrund af de argumenter, som der sendes med i metode
-* Metodens logik udnytter den prædefinerede metode, 'navigate', som navigere ind til det den komponent,
-* der hænger sammen med det overførte rutenavn
- */
-const navController = (navigation, route) =>{
-    navigation.navigate(route)
+const navController = (navigation, route) => {
+  navigation.navigate(route);
+};
+
+function DetailsScreen({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.headerText}>Hello, account name</Text>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navController(navigation, "Account")}
+        >
+          <Text style={styles.buttonText}>Account</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navController(navigation, "Billing")}
+        >
+          <Text style={styles.buttonText}>Billing</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navController(navigation, "Settings")}
+        >
+          <Text style={styles.buttonText}>Settings</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 }
 
+export default DetailsScreen;
 
-/*
- * DetailsScreen tager 'navigation' med som argument. navigation er en automatisk prædefineret prop, der kan refereres til i alle screen komponenter.
- *Se dokumentationen for mere info: https://reactnavigation.org/docs/navigation-prop/
- *
- *Derudover styles DetailsScreen, som indeholder omfatter to button komponenter, der benytters til at aktivere vores navController metode
- */
-function DetailsScreen({navigation}) {
-    return (
-        <View style={styles.container}>
-            <Text style={styles.text}>DetailsScreen!</Text>
-            <Button title="Go To your account" onPress={() => navController(navigation, 'account')}  />
-            <Button title="Go To your billings information" onPress={() => navController(navigation, 'billing')}  />
-        </View>
-    );
-}
-
-export default DetailsScreen
-
-
-//Lokal styling til brug i DetailsScreen.
 const styles = StyleSheet.create({
-    container: {
-        paddingTop:100,
-        paddingBottom:100,
-        borderColor: 'green',
-        borderWidth: 20,
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white',
-        height:'100%'
-    },
-    text: {
-        fontSize: 20,
-    },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff", // Background color
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20, // Spacing below the header text
+  },
+  buttonContainer: {
+    width: "80%", // Adjust the width as needed
+  },
+  button: {
+    backgroundColor: "#f0f0f0", // Light gray background
+    paddingVertical: 15, // Vertical padding
+    borderRadius: 8, // Border radius
+    marginBottom: 15, // Spacing between buttons
+    width: "100%", // Button width
+    alignItems: "center", // Center button content horizontally
+  },
+  buttonText: {
+    color: "#333", // Dark gray text color
+    fontSize: 18, // Button text font size
+    fontWeight: "bold", // Button text font weight
+  },
 });

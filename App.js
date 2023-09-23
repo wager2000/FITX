@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Startscreen from "./Components/StartScreen";
 import SearchScreen from "./Components/SearchScreen";
 import SettingsScreen from "./Components/Settings";
@@ -12,41 +12,38 @@ import HistoryScreen from "./Components/History";
 import KommendeArrangementer from "./Components/kommendeArrangementer";
 import AfsluttedeArrangementer from "./Components/afsluttedeArrangementer";
 import StackNavigator from "./Components/StackNavigator";
+import DetailsScreen from "./Components/DetailsScreen";
 
-import { AppRegistry } from "react-native";
-
-// AppRegistry.registerComponent('YourAppName', () => FITX);
-
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-      <Stack.Screen
-          options={{ headerShown: false }}
+      <Tab.Navigator>
+        <Tab.Screen
+          options={{ tabBarVisible: false }}
           name="Start"
           component={Startscreen}
         />
-      <Stack.Screen name="Registration" component={RegistrationScreen}></Stack.Screen>
-
-
-       
-        <Stack.Screen
-          options={{ headerShown: true }}
+        {/*<Tab.Screen name="Registration" component={RegistrationScreen} />*/}
+        {/*<Tab.Screen
           name="Login"
           component={LoginScreen}
-        />
-        <Stack.Screen name="Home" component={AdditionalDetailsScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
-        <Stack.Screen name="Search" component={SearchScreen} />
-        <Stack.Screen name="History" component={HistoryScreen} />
-        <Stack.Screen name="Afsluttede Arrangementer" component={AfsluttedeArrangementer} />
-        <Stack.Screen name="Kommende Arrangementer" component={KommendeArrangementer} />
+        />*/}
+        {/* <Tab.Screen name="Home" component={AdditionalDetailsScreen} />*/}
 
-
-
-      </Stack.Navigator>
+        <Tab.Screen name="Search" component={SearchScreen} />
+        <Tab.Screen name="History" component={HistoryScreen} />
+        <Tab.Screen name="Details" component={StackNavigator} />
+        {/*<Tab.Screen
+          name="Afsluttede Arrangementer"
+          component={AfsluttedeArrangementer}
+        />*/}
+        {/*<Tab.Screen
+          name="Kommende Arrangementer"
+          component={KommendeArrangementer}
+        />*/}
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }

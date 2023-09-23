@@ -96,8 +96,8 @@ const Startscreen = () => {
   }, []);
 
   const handleButtonPress = (button) => {
-    if (button.text === "Settings") {
-      navigation.navigate("Settings");
+    if (button.text === "Details") {
+      navigation.navigate("Details");
     } else {
       // Handle other button presses
     }
@@ -203,14 +203,14 @@ const Startscreen = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.bottomBarButton5}
-          onPress={() => navigation.navigate("Settings")}
+          onPress={() => navigation.navigate("Details")}
         >
           <View style={styles.buttonIconContainer}>
             <Image
               source={require("../assets/settings.png")}
               style={styles.buttonIcon}
             />
-            <Text style={styles.bottomBarButtonText}>Settings</Text>
+            <Text style={styles.bottomBarButtonText}>Details</Text>
           </View>
         </TouchableOpacity>
       </View>
