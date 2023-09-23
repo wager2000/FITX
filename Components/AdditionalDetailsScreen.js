@@ -34,6 +34,7 @@ const AdditionalDetailsScreen = ({ route }) => {
   }
 };
 
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -50,6 +51,10 @@ const AdditionalDetailsScreen = ({ route }) => {
         />
         <TouchableOpacity onPress={handleSaveDetails} style={styles.button}>
           <Text style={styles.buttonText}>Save Details</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleSaveDetails} style={styles.button}>
+          <Text style={styles.buttonText}>Skip</Text>
+
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>

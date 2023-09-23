@@ -19,6 +19,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+
       <Stack.Screen
           options={{ headerShown: false }}
           name="Start"
@@ -33,7 +34,7 @@ export default function App() {
           name="Login"
           component={LoginScreen}
         />
-        <Stack.Screen name="Home" component={AdditionalDetailsScreen} />
+              <Stack.Screen name="Home" component={AdditionalDetailsScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="Search" component={SearchScreen} />
 

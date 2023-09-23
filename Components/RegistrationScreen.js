@@ -9,6 +9,7 @@ import {
   View,
   ImageBackground,
   ScrollView,
+  SafeAreaView, // Import SafeAreaView
 } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
@@ -61,11 +62,7 @@ const RegistrationScreen = () => {
       source={require("../assets/livet.jpeg")}
       style={styles.container}
     >
-      <KeyboardAvoidingView
-        style={styles.overlay}
-        behavior="padding"
-        contentContainerStyle={styles.contentContainer}
-      >
+      <SafeAreaView style={styles.overlay}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <Text style={styles.headerText}>Welcome to User Registration</Text>
           <View style={styles.formContainer}>
@@ -110,7 +107,7 @@ const RegistrationScreen = () => {
             </Text>
           </View>
         </ScrollView>
-      </KeyboardAvoidingView>
+      </SafeAreaView>
     </ImageBackground>
   );
 };
@@ -126,12 +123,6 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.4)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  contentContainer: {
-    flexGrow: 1,
-    justifyContent: "center",
   },
   scrollContainer: {
     flexGrow: 1,
@@ -149,7 +140,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     borderRadius: 10,
     padding: 20,
-    alignItems: "center",
+    alignSelf: "center", // Center the form horizontally
+    marginTop: 20, // Add some top margin for spacing
   },
   input: {
     backgroundColor: "white",
@@ -180,7 +172,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     alignItems: "center",
-    marginTop: 20,
+
   },
   buttonText: {
     color: "white",
