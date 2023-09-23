@@ -6,7 +6,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  Platform
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
@@ -77,7 +77,7 @@ const Startscreen = () => {
           console.error("Location permission denied");
           return;
         }
-    
+
         const location = await Location.getCurrentPositionAsync({});
         console.log("User location:", location.coords);
         setUserLocation(location.coords);
@@ -112,9 +112,10 @@ const Startscreen = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>Her er aktiviteterne</Text>
+      </View>
       <ScrollView horizontal>
-      <Text style={styles.text}>Her er aktiveterne</Text>
-
         {buttons.slice(0, 5).map((button) => (
           <TouchableOpacity
             key={button.id}
@@ -158,9 +159,6 @@ const Startscreen = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-
-
- 
     </View>
   );
 };
@@ -169,6 +167,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  headerContainer: {
+    marginTop: 20, // Adjust the margin as needed
+    marginBottom: 10, // Adjust the margin as needed
+  },
+  headerText: {
+    fontSize: 24, // Adjust the font size as needed
+    fontWeight: "bold", // Adjust the font weight as needed
   },
   button: {
     backgroundColor: "#0782F9",
