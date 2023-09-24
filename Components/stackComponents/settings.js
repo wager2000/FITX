@@ -13,11 +13,23 @@ const Settings = () => {
         <Text style={styles.settingLabel}>Language</Text>
         <Text style={styles.settingValue}>English</Text>
       </View>
+      <View style={styles.settingItem}>
+        <Text style={styles.settingLabel}>Theme</Text>
+        <Text style={styles.settingValue}>Dark</Text>
+      </View>
+      <View style={styles.settingItem}>
+        <Text style={styles.settingLabel}>Sync Data</Text>
+        <Text style={styles.settingValue}>Every hour</Text>
+      </View>
+      <View style={styles.settingItem}>
+        <Text style={styles.settingLabel}>Push Notifications</Text>
+        <Text style={styles.settingValue}>Enabled</Text>
+      </View>
       {/* Add more setting items as needed */}
     </View>
   );
 };
- 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

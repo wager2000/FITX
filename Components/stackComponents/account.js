@@ -7,63 +7,75 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
+import { auth, db } from "../../firebaseConfig"; // Import Firebase auth and Firestore objects
+import { updateProfile } from "firebase/auth"; // Import the updateProfile function
+import { doc, getDoc, updateDoc } from "firebase/firestore"; // Import Firestore functions
 
 const AccountScreen = () => {
   const [email, setEmail] = useState("");
-  const [userDocument, setUserDocument] = useState(null); // Store user data from Firestore
-  const [editMode, setEditMode] = useState(false); // To toggle edit mode
+  const [newEmail, setNewEmail] = useState("");
+  const [editMode, setEditMode] = useState(false);
+  const [userDocumentRef, setUserDocumentRef] = useState(null); // Store user's Firestore document reference
 
   useEffect(() => {
-    // Fetch user data from Firestore
-    fetchUserData("USER_ID_HERE"); // Replace with the actual user ID
+    // Check if a user is authenticated
+    const user = auth.currentUser;
+    if (user) {
+      setUserDocumentRef(doc(db, "users", user.uid)); // Set the Firestore document reference
+      fetchUserData(user.uid); // Fetch user data when the component mounts
+    }
   }, []);
 
   const fetchUserData = async (userId) => {
-    const userDocRef = doc(db, "users", userId); // Reference to the user's document in Firestore
-    const userDocSnapshot = await getDoc(userDocRef);
-
-    if (userDocSnapshot.exists()) {
-      // User document exists in Firestore
-      const userData = userDocSnapshot.data();
-      setEmail(userData.Email);
-      // You can set other user data fields as needed
-      setUserDocument(userDocSnapshot.ref);
+    try {
+      const userDoc = await getDoc(doc(db, "users", userId));
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setEmail(userData.Email); // Set the email from Firestore
+      }
+    } catch (error) {
+      console.error("Error fetching user data: ", error);
     }
   };
 
-  const handleUpdate = async () => {
+  const handleSave = async () => {
     try {
-      // Update user data in Firestore
-      await updateDoc(userDocument, {
-        Email: email,
-        // Update other user data fields as needed
+      // Update the email in Firebase Authentication
+      const user = auth.currentUser;
+      await updateProfile(user, { email: newEmail });
+
+      // Update the email in Firestore
+      await updateDoc(userDocumentRef, {
+        Email: newEmail,
       });
 
-      setEditMode(false); // Disable edit mode after updating
+      // Update the email in the UI
+      setEmail(newEmail);
+      setEditMode(false);
     } catch (error) {
-      console.error("Error updating document: ", error);
+      console.error("Error updating email: ", error);
     }
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={styles.inputContainer}>
-        <Text>Email:</Text>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={styles.input}
-          editable={editMode} // Allow editing only in edit mode
-        />
-        {/* Add more input fields for other user data if needed */}
+    <View style={styles.container}>
+      <Text style={styles.header}>Account</Text>
+      <View style={styles.settingItem}>
+        <Text style={styles.settingLabel}>Email: {email}</Text>
       </View>
-
+      {editMode ? (
+        <View style={styles.settingItem}>
+          <TextInput
+            placeholder="New Email"
+            value={newEmail}
+            onChangeText={(text) => setNewEmail(text)}
+            style={styles.input}
+          />
+        </View>
+      ) : null}
       <View style={styles.buttonContainer}>
         {editMode ? (
-          <TouchableOpacity onPress={handleUpdate} style={styles.button}>
+          <TouchableOpacity onPress={handleSave} style={styles.button}>
             <Text style={styles.buttonText}>Save</Text>
           </TouchableOpacity>
         ) : (
@@ -72,27 +84,37 @@ const AccountScreen = () => {
           </TouchableOpacity>
         )}
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
-
-export default AccountScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    padding: 16,
+    backgroundColor: "white",
   },
-  inputContainer: {
-    width: "80%",
+  header: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  settingItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  settingLabel: {
+    fontSize: 18,
   },
   input: {
     backgroundColor: "white",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    marginTop: 5,
+    borderWidth: 1,
+    borderColor: "gray",
   },
   buttonContainer: {
     width: "60%",
@@ -114,3 +136,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
+export default AccountScreen;

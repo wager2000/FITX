@@ -1,19 +1,32 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TextInput } from "react-native";
 
 const Billing = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Billing</Text>
       <View style={styles.settingItem}>
-        <Text style={styles.settingLabel}>Notification</Text>
-        <Text style={styles.settingValue}>On</Text>
+        <Text style={styles.settingLabel}>Card Type</Text>
+        <TextInput
+          style={styles.settingValue}
+          placeholder="Enter Card Type"
+        />
       </View>
       <View style={styles.settingItem}>
-        <Text style={styles.settingLabel}>Language</Text>
-        <Text style={styles.settingValue}>English</Text>
+        <Text style={styles.settingLabel}>Card Number</Text>
+        <TextInput
+          style={styles.settingValue}
+          placeholder="Enter Card Number"
+        />
       </View>
-      {/* Add more setting items as needed */}
+      <View style={styles.settingItem}>
+        <Text style={styles.settingLabel}>Expiry Date</Text>
+        <TextInput
+          style={styles.settingValue}
+          placeholder="Enter Expiry Date"
+        />
+      </View>
+      {/* Add more billing information fields as needed */}
     </View>
   );
 };
