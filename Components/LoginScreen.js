@@ -1,3 +1,4 @@
+// Importerer de nødvendige biblioteker og moduler
 import { useNavigation } from "@react-navigation/core";
 import React, { useState } from "react";
 import {
@@ -9,28 +10,35 @@ import {
   View,
   Image,
 } from "react-native";
-import { signInWithEmailAndPassword } from "firebase/auth"; // Import Firebase Modular SDK components
+import { signInWithEmailAndPassword } from "firebase/auth"; // Importerer Firebase moduler 
 import { db } from "../firebaseConfig";
 import { auth } from "../firebaseConfig";
 
+// Definerer komponenten til login-skærmen
 const LoginScreen = () => {
+  // States til opbevaring af brugerens indtastede oplysninger
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+// Bruger navigation til at håndtere skærmnavigation
   const navigation = useNavigation();
 
+  // Funktion til at håndtere brugerens login
   const handleLogin = () => {
+    // Login ved hjælp af Firebase authentication
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
         console.log("Logged in with:", user.email);
-        navigation.replace("Start"); // Navigate to your home screen after login
+        navigation.replace("Start"); // Navigarer til startskærmen efter accepteret login
       })
       .catch((error) => alert(error.message));
   };
 
+  // Render Loginskærmen
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
+      {/*Baggrundbillede på loginskærmen*/}
       <View style={styles.backgroundImageContainer}>
         <Image
           source={require("../assets/basket.jpeg")} // Replace with your background image file
@@ -39,6 +47,7 @@ const LoginScreen = () => {
       </View>
       <Text style={styles.headerText}>Login</Text>
       <View style={styles.formContainer}>
+        {/*Inputfelter*/}
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Email"
@@ -54,6 +63,7 @@ const LoginScreen = () => {
             secureTextEntry
           />
         </View>
+        {/*Knappen til login*/}
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleLogin} style={styles.button}>
             <Text style={styles.buttonText}>Login</Text>
@@ -66,6 +76,7 @@ const LoginScreen = () => {
 
 export default LoginScreen;
 
+// Forskellige styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

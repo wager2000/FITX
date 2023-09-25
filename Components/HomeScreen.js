@@ -8,16 +8,17 @@ import {
   Image,
 } from "react-native";
 
-
+// Definerer komponenten til Hjemmeskærmen med navigation som parameter
 const HomeScreen = ({ navigation }) => {
+  // Funktion til at håndtere et tryk på login-knappen
   const handleLoginPress = () => {
-    navigation.navigate("Login"); // Navigate to the Login screen
+    navigation.navigate("Login"); // Navigerer til login-skærmen
   };
-
+  // Funktion til at håndtere et tryk på login-knappen
   const handleSignUpPress = () => {
-    navigation.navigate("Registration"); // Navigate to the Registration screen
+    navigation.navigate("Registration"); // Navigerer til registreringsskærmen
   };
-
+  // Render hjemmeskærmen
   return (
     <ImageBackground
       source={require("../assets/hygge.jpeg")} // Replace with your background image
@@ -29,9 +30,11 @@ const HomeScreen = ({ navigation }) => {
           Discover and enjoy exciting activities together.
         </Text>
         <View style={styles.buttonContainer}>
+          {/*Login-knappen*/}
           <TouchableOpacity onPress={handleLoginPress} style={styles.button}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
+          {/*Registreringsknappen*/}
           <TouchableOpacity onPress={handleSignUpPress} style={styles.button}>
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
@@ -43,7 +46,7 @@ const HomeScreen = ({ navigation }) => {
     </ImageBackground>
   );
 };
-
+// De forskellige styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
