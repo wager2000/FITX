@@ -14,7 +14,7 @@ import LoginScreen from "./Components/LoginScreen";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-export default function App() {
+/*export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -56,9 +56,9 @@ export default function App() {
       </Tab.Navigator>
     </NavigationContainer>
   );
-}
+}*/
 
-/* with login
+//with login
 export default function App() {
   const TabNavigator = () => {
     return (
@@ -112,7 +112,7 @@ export default function App() {
     </NavigationContainer>
 
   );
-}*/
+}
 
 const styles = StyleSheet.create({
   // Your custom styles here
