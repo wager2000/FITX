@@ -1,0 +1,10 @@
+For at starte applikationen skal man skrive "npm install"
+Efterfølgende skal man skrive "expo start" og trykke på "i".
+Appen åbner i expo simulator, hvor man skal oprette et account.
+Når man har oprettet et account, kan man gå direkte ind i details i tabnavigator.
+Her er mine 4 screens.
+Den første screen er "DetailsScreen.js"
+Den anden screen er "Account.js".
+Den tredje screen er "Billing.js"
+Den fjerde screen er "Settings.js"
+Database funktionen ligger inde i "Account.js"
