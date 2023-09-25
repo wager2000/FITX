@@ -17,19 +17,21 @@ import { db } from "../firebaseConfig";
 import { auth } from "../firebaseConfig";
 import { CheckBox } from "react-native-elements";
 
-
+// Definerer en komponent til registreringskærmen
 const RegistrationScreen = () => {
+  // States skal bruges til at opbevare brugerdata
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [interests, setInterests] = useState([]);
   const [level, setLevel] = useState([]);
 
-
+  //Bruger navigation til at styre de forskellige skærme
   const navigation = useNavigation();
 
+  // Funktion til at håndtere registreringen af en ny bruger
   const handleSignUp = async () => {
     try {
-      // Add user data to Firestore
+      // Tilføjer en bruger til Firestore
       const userRef = collection(db, "users");
       const userData = {
         Email: email,
@@ -41,7 +43,7 @@ const RegistrationScreen = () => {
       const docRef = await addDoc(userRef, userData);
       console.log("Document written with ID: ", docRef.id);
 
-      // Proceed with user registration
+      // Fortsætter med at lave en brugerregistrering med Firebase Authentication
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredentials) => {
           const user = userCredentials.user;
@@ -49,7 +51,7 @@ const RegistrationScreen = () => {
           console.log("Password with:", user.password);
           console.log("Interests:", user.interests);
           console.log("Level is:", user.level);
-          // You can navigate to the home screen or any other screen after registration.
+          // Man blive navigeret til login-skærmen efter registrering
           navigation.replace("Login");
         })
         .catch((error) => alert(error.message));
@@ -57,11 +59,12 @@ const RegistrationScreen = () => {
       console.error("Error adding document: ", error);
     }
   };
-
+  // Funktion til at håndtere tryk på "Log ind" linket
   const handleLoginLinkPress = () => {
     navigation.navigate("Login");
   };
 
+  // Render registreringsskærmen
   return (
     <ImageBackground
       source={require("../assets/livet.jpeg")}
@@ -71,6 +74,7 @@ const RegistrationScreen = () => {
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <Text style={styles.headerText}>User Registration</Text>
           <View style={styles.formContainer}>
+            {/*Input felter*/}
             <TextInput
               placeholder="Email"
               value={email}
@@ -84,6 +88,7 @@ const RegistrationScreen = () => {
               style={styles.input}
               secureTextEntry
             />
+            {/*Interesse felt*/}
             <Text style={styles.label}>Interests:</Text>
             {interestOptions.map((option) => (
               <CheckBox
@@ -101,6 +106,7 @@ const RegistrationScreen = () => {
                 textStyle={styles.checkBoxText}
               />
             ))}
+            {/*Registreringsknap og log ind-link*/}
             <TouchableOpacity onPress={handleSignUp} style={styles.button}>
               <Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
@@ -117,8 +123,10 @@ const RegistrationScreen = () => {
   );
 };
 
+// Definerer interesse- og niveauindstillinger
 const interestOptions = ["Soccer", "Yoga", "Pilates", "Crossfit", "Other"];
 
+// Definerer de forskellige styles på de implementerede ting på skærmen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
