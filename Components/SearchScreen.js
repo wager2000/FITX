@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TextInput, Button, Image } from "react-native";
+import { View, StyleSheet, TextInput, Button, Image, Text} from "react-native";
 import MapView, { Marker, Circle } from "react-native-maps"; // Import Circle component
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { Card, Title, Paragraph } from "react-native-paper";
 import * as Location from "expo-location";
+import Slider from '@react-native-community/slider';
 
 const SearchScreen = () => {
   const [places, setPlaces] = useState([]);
@@ -17,6 +18,7 @@ const SearchScreen = () => {
     latitudeDelta: 0.02, // Smaller value for closer zoom
     longitudeDelta: 0.02, // Smaller value for closer zoom
   });
+  const [radiusKm, setRadiusKm] = useState(1); // Initial radius of 1 km
 
   useEffect(() => {
     // Create a reference to the "Places" collection
@@ -111,6 +113,7 @@ const SearchScreen = () => {
       <MapView
         style={styles.map}
         region={initialRegion}
+        
       >
         {/* Add a Circle component for the user's location */}
         {userLocation && (
@@ -119,7 +122,7 @@ const SearchScreen = () => {
               latitude: userLocation.latitude,
               longitude: userLocation.longitude,
             }}
-            radius={50} // Adjust the radius as needed
+            radius={radiusKm * 1000} // Convert kilometers to meters
             fillColor="rgba(0, 0, 255, 0.5)" // Blue color with transparency
             strokeColor="rgba(0, 0, 255, 1)" // Blue color without transparency
           />
@@ -143,6 +146,7 @@ const SearchScreen = () => {
             />
           </Marker>
         ))}
+        
       </MapView>
       {selectedPlace && (
          <Card style={styles.card}>
@@ -164,8 +168,22 @@ const SearchScreen = () => {
          </Card.Content>
        </Card>
       )}
-    </View>
-  );
+    {!selectedPlace && ( // Render the Slider only when selectedPlace is null
+      <View>
+       <Slider
+          style={styles.slider}
+          minimumValue={0}
+          maximumValue={10} // You can adjust the maximum value as needed
+          step={1}
+          value={radiusKm}
+          onValueChange={(value) => setRadiusKm(value)}
+        />
+        <Text style={styles.sliderText}>Radius: {radiusKm} km</Text>
+      </View>
+    )}
+  </View>
+);
+
 };
 
   

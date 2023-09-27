@@ -12,7 +12,7 @@ import {
   SafeAreaView, // Import SafeAreaView
 } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore"; // Update the import statements
 import { db } from "../firebaseConfig";
 import { auth } from "../firebaseConfig";
 import { CheckBox } from "react-native-elements";
@@ -40,8 +40,7 @@ const RegistrationScreen = () => {
         Level: level,
       };
 
-      const docRef = await addDoc(userRef, userData);
-      console.log("Document written with ID: ", docRef.id);
+      await setDoc(userRef, userData);
 
       // Fortsætter med at lave en brugerregistrering med Firebase Authentication
       createUserWithEmailAndPassword(auth, email, password)
@@ -56,7 +55,8 @@ const RegistrationScreen = () => {
         })
         .catch((error) => alert(error.message));
     } catch (error) {
-      console.error("Error adding document: ", error);
+      console.error("Error creating user: ", error);
+      alert(error.message);
     }
   };
   // Funktion til at håndtere tryk på "Log ind" linket

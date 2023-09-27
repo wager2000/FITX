@@ -1,0 +1,3 @@
+For at starte applikationen skal man skrive "npm install"
+Efterfølgende skal man skrive "expo start" og trykke på "i".
+Appen åbner i expo simulator.

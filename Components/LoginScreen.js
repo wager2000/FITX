@@ -24,6 +24,43 @@ const LoginScreen = () => {
   const navigation = useNavigation();
 
   // Funktion til at håndtere brugerens login
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigation.navigate("TabNavigator");
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const handleSignUp = async () => {
+    try {
+      // Initialize Firestore
+
+      // Add user data to Firestore
+      const userRef = collection(db, "users"); // Reference to a Firestore collection
+      const userData = {
+        Email: email,
+        Password: password,
+        // Add other user data as needed
+      };
+
+      const docRef = await addDoc(userRef, userData); // Add a document to the collection
+      console.log("Document written with ID: ", docRef.id);
+
+      // Proceed with user registration
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredentials) => {
+          const user = userCredentials.user;
+          console.log("Registered with:", user.email);
+        })
+        .catch((error) => alert(error.message));
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  };
+
   const handleLogin = () => {
     // Login ved hjælp af Firebase authentication
     signInWithEmailAndPassword(auth, email, password)
@@ -134,6 +171,11 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
+    fontWeight: "700",
+    fontSize: 16,
+  },
+  buttonOutlineText: {
+    color: "#0782F9",
     fontWeight: "700",
     fontSize: 16,
   },
