@@ -16,7 +16,7 @@ import HomeScreen from "./Components/HomeScreen";
 
 // AppRegistry.registerComponent('YourAppName', () => FITX);
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {

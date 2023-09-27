@@ -15,7 +15,6 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore"; // Update the import statements
 import { db } from "../firebaseConfig";
 import { auth } from "../firebaseConfig";
-import { CheckBox } from "react-native-elements";
 
 // Definerer en komponent til registreringskærmen
 const RegistrationScreen = () => {
