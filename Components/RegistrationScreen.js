@@ -10,7 +10,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore"; // Update the import statements
 import { db } from "../firebaseConfig";
 import { auth } from "../firebaseConfig";
 
@@ -22,34 +22,32 @@ const RegistrationScreen = () => {
 
   const handleSignUp = async () => {
     try {
-      // Add user data to Firestore
-      const userRef = collection(db, "users");
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Add user data to Firestore with the UID as the document ID
+      const userRef = doc(db, "users", user.uid);
       const userData = {
         Email: email,
         Password: password,
         // Add other user data as needed
       };
 
-      const docRef = await addDoc(userRef, userData);
-      console.log("Document written with ID: ", docRef.id);
+      await setDoc(userRef, userData);
 
-      // Proceed with user registration
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredentials) => {
-          const user = userCredentials.user;
-          console.log("Registered with:", user.email);
-          console.log("Password with:", user.password);
-          // You can navigate to the home screen or any other screen after registration.
-          navigation.replace("Home");
-        })
-        .catch((error) => alert(error.message));
+      console.log("Registered with:", user.email);
+      console.log("UID:", user.uid);
+
+      // You can navigate to the home screen or any other screen after registration.
+      navigation.replace("LoginScreen");
     } catch (error) {
-      console.error("Error adding document: ", error);
+      console.error("Error creating user: ", error);
+      alert(error.message);
     }
   };
 
   const handleLoginLinkPress = () => {
-    navigation.navigate("Login"); // Replace "Login" with the name of your login screen
+    navigation.navigate("LoginScreen"); // Replace "Login" with the name of your login screen
   };
 
   return (

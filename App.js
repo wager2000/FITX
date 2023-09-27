@@ -1,18 +1,18 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons"; // You can replace this with your preferred icon library
 import Startscreen from "./Components/StartScreen";
-import SearchScreen from "./Components/SearchScreen";
-import SettingsScreen from "./Components/Settings";
-import AdditionalDetailsScreen from "./Components/AdditionalDetailsScreen";
-import LoginScreen from "./Components/LoginScreen";
 import RegistrationScreen from "./Components/RegistrationScreen";
+import SearchScreen from "./Components/SearchScreen";
 import HistoryScreen from "./Components/History";
 import StackNavigatorDetails from "./Components/StackNavigator";
+import LoginScreen from "./Components/LoginScreen";
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
@@ -31,7 +31,9 @@ export default function App() {
             } else if (route.name === "History") {
               iconName = focused ? "time" : "time-outline";
             } else if (route.name === "Details") {
-              iconName = focused ? "information-circle" : "information-circle-outline";
+              iconName = focused
+                ? "information-circle"
+                : "information-circle-outline";
             }
 
             // You can customize the appearance of the icons here
@@ -57,10 +59,5 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  // Your custom styles here
 });

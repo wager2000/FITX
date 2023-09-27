@@ -6,7 +6,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  Platform
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
@@ -77,7 +77,7 @@ const Startscreen = () => {
           console.error("Location permission denied");
           return;
         }
-    
+
         const location = await Location.getCurrentPositionAsync({});
         console.log("User location:", location.coords);
         setUserLocation(location.coords);
@@ -96,8 +96,8 @@ const Startscreen = () => {
   }, []);
 
   const handleButtonPress = (button) => {
-    if (button.text === "Settings") {
-      navigation.navigate("Settings");
+    if (button.text === "Details") {
+      navigation.navigate("Details");
     } else {
       // Handle other button presses
     }
@@ -112,9 +112,10 @@ const Startscreen = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>Her er aktiviteterne</Text>
+      </View>
       <ScrollView horizontal>
-      <Text style={styles.text}>Her er aktiveterne</Text>
-
         {buttons.slice(0, 5).map((button) => (
           <TouchableOpacity
             key={button.id}
@@ -158,62 +159,6 @@ const Startscreen = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-
-      <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.bottomBarButton}>
-          <View style={styles.buttonIconContainer}>
-            <Image
-              source={require("../assets/home.png")}
-              style={styles.buttonIcon}
-            />
-            <Text style={styles.bottomBarButtonText}>Home</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.bottomBarButton}
-          onPress={() => navigation.navigate("Search")}
-        >
-          <View style={styles.buttonIconContainer}>
-            <Image
-              source={require("../assets/search.png")}
-              style={styles.buttonIcon}
-            />
-            <Text style={styles.bottomBarButtonText}>Search</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomBarButton}>
-          <View style={styles.buttonIconContainer}>
-            <Image
-              source={require("../assets/love.png")}
-              style={styles.buttonIcon}
-            />
-            <Text style={styles.bottomBarButtonText}>Favorite</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.bottomBarButton}
-        onPress={() => navigation.navigate("History")}>
-          <View style={styles.buttonIconContainer}>
-            <Image
-              source={require("../assets/file.png")}
-              style={styles.buttonIcon}
-            />
-            <Text style={styles.bottomBarButtonText}>History</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.bottomBarButton5}
-          onPress={() => navigation.navigate("Settings")}
-        >
-          <View style={styles.buttonIconContainer}>
-            <Image
-              source={require("../assets/settings.png")}
-              style={styles.buttonIcon}
-            />
-            <Text style={styles.bottomBarButtonText}>Settings</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
@@ -222,7 +167,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 100,
+  },
+  headerContainer: {
+    marginTop: 20, // Adjust the margin as needed
+    marginBottom: 10, // Adjust the margin as needed
+  },
+  headerText: {
+    fontSize: 24, // Adjust the font size as needed
+    fontWeight: "bold", // Adjust the font weight as needed
   },
   button: {
     backgroundColor: "#0782F9",
