@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
+import { db } from '../../firebaseConfig';
 
-const KommendeArrangementer = () => {
-    const [arrangementerData, setArrangementerData] = useState([]);
+const AfsluttedeArrangementer = () => {
+  const [arrangementerData, setArrangementerData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +19,7 @@ const KommendeArrangementer = () => {
             const dateFirebase = eventData.Date.toDate();
 
             // Compare the event date with the current date
-            if (dateFirebase > currentDate) {
+            if (dateFirebase < currentDate) {
               const date = dateFirebase.toLocaleString();
 
               return {
@@ -61,6 +61,8 @@ const KommendeArrangementer = () => {
     </View>
   );
 };
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -96,5 +98,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default KommendeArrangementer;
+export default AfsluttedeArrangementer;
 

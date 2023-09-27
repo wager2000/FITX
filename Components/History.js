@@ -1,65 +1,76 @@
-import { useNavigation } from "@react-navigation/native";
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+//Importerer de nødvendige funktioner fra react.
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import * as React from "react";
+//Funktionen navController gør det muligt at navigerer i appen route.
+const navController = (navigation, route) => {
+  navigation.navigate(route);
+};
 
-const History = () => {
-  const navigation = useNavigation();
-
+//Funktionen DetailsScreen returnerer et View med Text og TouchableOpacity, således at brugeren kan navigere til de forskellige komponenter i stacken.
+//Så hver TouchableOpacity har en knap, hvor at brugeren kan trykke på den og komme til den ønskede komponent
+function History({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Check Your Sessions</Text>
-      <View style={styles.buttonContainer}>
+      <Text style={styles.headerText}>Check your Sessions</Text>
+      <View style={styles.settingContainer}>
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('Kommende Arrangementer')}
+          style={styles.settingItem}
+          onPress={() => navController(navigation, "AfsluttedeArrangementer")}
         >
-          <Text style={styles.buttonText}>Incomming Sessions</Text>
+          <Text style={styles.settingLabel}>Incoming Sessions</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('Afsluttede Arrangementer')}
+          style={styles.settingItem}
+          onPress={() => navController(navigation, "KommendeArrangementer")}
         >
-          <Text style={styles.buttonText}>Finished Sessions</Text>
+          <Text style={styles.settingLabel}>Finished Sessions</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
-};
+}
 
+export default History;
+
+//Styles til UI
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingTop: 20,
-    backgroundColor: '#EFEFEF', // Light gray background
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white", // Background color
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%', // Adjusted to leave space on both sides
-    marginTop: 20, // Increased margin for better spacing
-  },
-  button: {
-    flex: 1,
-    borderRadius: 8,
-    backgroundColor: '#877F7E', // Light coral background
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 16,
-    marginHorizontal: 8, // Added margin to separate buttons
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  header: {
+  headerText: {
     fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#333',
+    fontWeight: "bold",
+    marginBottom: 20, // Spacing below the header text
+  },
+  settingContainer: {
+    width: "80%", // Adjust the width as needed
+    backgroundColor: "white", // Background color of the settings container
+    padding: 16, // Padding for the settings container
+    borderRadius: 8, // Border radius for the settings container
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5, // Shadow for Android
+  },
+  settingItem: {
+    backgroundColor: "#f0f0f0", // Light gray background
+    paddingVertical: 15, // Vertical padding
+    borderRadius: 8, // Border radius
+    marginBottom: 15, // Spacing between settings items
+    alignItems: "center", // Center setting item content horizontally
+  },
+  settingLabel: {
+    color: "#333", // Dark gray text color
+    fontSize: 18, // Setting item text font size
+    fontWeight: "bold", // Setting item text font weight
   },
 });
 
-export default History;
+
