@@ -1,13 +1,13 @@
 //Viktor
 //Importerer de nødvendige funktioner fra react, samt de forskellige komponenter.
 import * as React from "react";
-import Billing from "./stackComponents/Billing";
-import Account from "./stackComponents/Account";
-import Settings from "./stackComponents/Settings";
+import Billing from "../stackComponentsDetails/Billing";
+import Account from "../stackComponentsDetails/Account";
+import Settings from "../stackComponentsDetails/Settings";
 /*import Billing from "./stackComponents/Billing";
 import Account from "./stackComponents/Account";
 import Settings from "./stackComponents/Settings";*/
-import DetailsScreen from "./DetailsScreen";
+import DetailsScreen from "../DetailsScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 
 //Stacknavigator defineres.
@@ -20,7 +20,7 @@ function StackNavigatorDetails() {
   return (
     <Stack.Navigator initialRouteName="Details">
       <Stack.Screen
-        name="All options"
+        name="All Options"
         component={DetailsScreen}
         options={{
           headerTitleAlign: "center",
