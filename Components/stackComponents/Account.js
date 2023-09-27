@@ -11,7 +11,7 @@ import { auth, db } from "../../firebaseConfig"; // Import Firebase auth and Fir
 import { updateProfile } from "firebase/auth"; // Import the updateProfile function
 import { doc, getDoc, updateDoc } from "firebase/firestore"; // Import Firestore functions
 
-const AccountScreen = () => {
+const Account = () => {
   const [email, setEmail] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [editMode, setEditMode] = useState(false);
@@ -79,7 +79,10 @@ const AccountScreen = () => {
             <Text style={styles.buttonText}>Save</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity onPress={() => setEditMode(true)} style={styles.button}>
+          <TouchableOpacity
+            onPress={() => setEditMode(true)}
+            style={styles.button}
+          >
             <Text style={styles.buttonText}>Edit</Text>
           </TouchableOpacity>
         )}
@@ -137,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AccountScreen;
+export default Account;

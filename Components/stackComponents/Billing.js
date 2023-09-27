@@ -7,10 +7,7 @@ const Billing = () => {
       <Text style={styles.header}>Billing</Text>
       <View style={styles.settingItem}>
         <Text style={styles.settingLabel}>Card Type</Text>
-        <TextInput
-          style={styles.settingValue}
-          placeholder="Enter Card Type"
-        />
+        <TextInput style={styles.settingValue} placeholder="Enter Card Type" />
       </View>
       <View style={styles.settingItem}>
         <Text style={styles.settingLabel}>Card Number</Text>

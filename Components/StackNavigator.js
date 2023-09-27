@@ -4,6 +4,9 @@ import * as React from "react";
 import Billing from "./stackComponents/Billing";
 import Account from "./stackComponents/Account";
 import Settings from "./stackComponents/Settings";
+/*import Billing from "./stackComponents/Billing";
+import Account from "./stackComponents/Account";
+import Settings from "./stackComponents/Settings";*/
 import DetailsScreen from "./DetailsScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 
