@@ -8,91 +8,124 @@ import {
   TouchableOpacity,
   View,
   ImageBackground,
+  ScrollView,
+  SafeAreaView, // Import SafeAreaView
 } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore"; // Update the import statements
 import { db } from "../firebaseConfig";
 import { auth } from "../firebaseConfig";
 
+// Definerer en komponent til registreringskærmen
 const RegistrationScreen = () => {
+  // States skal bruges til at opbevare brugerdata
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [interests, setInterests] = useState([]);
+  const [level, setLevel] = useState([]);
 
+  //Bruger navigation til at styre de forskellige skærme
   const navigation = useNavigation();
 
+  // Funktion til at håndtere registreringen af en ny bruger
   const handleSignUp = async () => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      // Add user data to Firestore with the UID as the document ID
-      const userRef = doc(db, "users", user.uid);
+      // Tilføjer en bruger til Firestore
+      const userRef = collection(db, "users");
       const userData = {
         Email: email,
         Password: password,
-        // Add other user data as needed
+        Interest: interests,
+        Level: level,
       };
 
       await setDoc(userRef, userData);
 
-      console.log("Registered with:", user.email);
-      console.log("UID:", user.uid);
-
-      // You can navigate to the home screen or any other screen after registration.
-      navigation.replace("LoginScreen");
+      // Fortsætter med at lave en brugerregistrering med Firebase Authentication
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredentials) => {
+          const user = userCredentials.user;
+          console.log("Registered with:", user.email);
+          console.log("Password with:", user.password);
+          console.log("Interests:", user.interests);
+          console.log("Level is:", user.level);
+          // Man blive navigeret til login-skærmen efter registrering
+          navigation.replace("Login");
+        })
+        .catch((error) => alert(error.message));
     } catch (error) {
       console.error("Error creating user: ", error);
       alert(error.message);
     }
   };
-
+  // Funktion til at håndtere tryk på "Log ind" linket
   const handleLoginLinkPress = () => {
-    navigation.navigate("LoginScreen"); // Replace "Login" with the name of your login screen
+    navigation.navigate("Login");
   };
 
+  // Render registreringsskærmen
   return (
     <ImageBackground
-      source={require("../assets/livet.jpeg")} // Replace with your image file
+      source={require("../assets/livet.jpeg")}
       style={styles.container}
     >
-      <KeyboardAvoidingView
-        style={styles.overlay}
-        behavior="padding"
-        contentContainerStyle={styles.contentContainer}
-      >
-        <Text style={styles.headerText}>Welcome to User Registration</Text>
-        <View style={styles.formContainer}>
-          <TextInput
-            placeholder="Email"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Password"
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            style={styles.input}
-            secureTextEntry
-          />
-          <TouchableOpacity onPress={handleSignUp} style={styles.button}>
-            <Text style={styles.buttonText}>Register</Text>
-          </TouchableOpacity>
-          <Text style={styles.loginText}>
-            If you already have a user, click{" "}
-            <Text
-              style={styles.loginLinkText}
-              onPress={handleLoginLinkPress}
-            >
-              here
+      <SafeAreaView style={styles.overlay}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <Text style={styles.headerText}>User Registration</Text>
+          <View style={styles.formContainer}>
+            {/*Input felter*/}
+            <TextInput
+              placeholder="Email"
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Password"
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+              style={styles.input}
+              secureTextEntry
+            />
+            {/*Interesse felt*/}
+            <Text style={styles.label}>Interests:</Text>
+            {interestOptions.map((option) => (
+              <CheckBox
+                key={option}
+                title={option}
+                checked={interests.includes(option)}
+                onPress={() =>
+                  setInterests((prevInterests) =>
+                    prevInterests.includes(option)
+                      ? prevInterests.filter((interest) => interest !== option)
+                      : [...prevInterests, option]
+                  )
+                }
+                containerStyle={styles.checkBoxContainer}
+                textStyle={styles.checkBoxText}
+              />
+            ))}
+            {/*Registreringsknap og log ind-link*/}
+            <TouchableOpacity onPress={handleSignUp} style={styles.button}>
+              <Text style={styles.buttonText}>Register</Text>
+            </TouchableOpacity>
+            <Text style={styles.loginText}>
+              If you already have a user, click{" "}
+              <Text style={styles.loginLinkText} onPress={handleLoginLinkPress}>
+                here
+              </Text>
             </Text>
-          </Text>
-        </View>
-      </KeyboardAvoidingView>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     </ImageBackground>
   );
 };
 
+// Definerer interesse- og niveauindstillinger
+const interestOptions = ["Soccer", "Yoga", "Pilates", "Crossfit", "Other"];
+
+// Definerer de forskellige styles på de implementerede ting på skærmen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -101,11 +134,9 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.4)", // Add a semi-transparent black overlay
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
   },
-  contentContainer: {
+  scrollContainer: {
     flexGrow: 1,
     justifyContent: "center",
   },
@@ -114,19 +145,38 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
     marginBottom: 20,
+    textAlign: "center",
   },
   formContainer: {
     width: "80%",
-    backgroundColor: "rgba(255, 255, 255, 0.8)", // Add a semi-transparent white background
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
     borderRadius: 10,
     padding: 20,
+    alignSelf: "center", // Center the form horizontally
+    marginTop: 20, // Add some top margin for spacing
   },
   input: {
     backgroundColor: "white",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
+    marginTop: 10,
+    width: "100%",
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+  checkBoxContainer: {
+    backgroundColor: "transparent",
+    borderWidth: 0,
+    margin: 0,
+    padding: 0,
     marginTop: 5,
+  },
+  checkBoxText: {
+    fontSize: 16,
   },
   button: {
     backgroundColor: "#0782F9",
@@ -134,7 +184,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     alignItems: "center",
-    marginTop: 10,
+
   },
   buttonText: {
     color: "white",

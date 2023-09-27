@@ -11,8 +11,13 @@ import HistoryScreen from "./Components/History";
 import StackNavigatorDetails from "./Components/StackNavigator";
 import LoginScreen from "./Components/LoginScreen";
 
-const Tab = createBottomTabNavigator();
+import { AppRegistry } from "react-native";
+import HomeScreen from "./Components/HomeScreen";
+
+// AppRegistry.registerComponent('YourAppName', () => FITX);
+
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (

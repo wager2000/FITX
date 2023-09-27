@@ -245,4 +245,5 @@ const styles = StyleSheet.create({
   bottomBarButton5: {},
 });
 
+
 export default Startscreen;

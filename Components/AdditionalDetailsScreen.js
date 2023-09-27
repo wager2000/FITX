@@ -16,23 +16,24 @@ const AdditionalDetailsScreen = ({ route }) => {
   const [interests, setInterests] = useState("");
   const navigation = useNavigation();
 
-  const { userId } = route.params; // Get the user ID passed from RegistrationScreen
+ //const { userId } = route.params; // Get the user ID passed from RegistrationScreen
 
-  const handleSaveDetails = async () => {
-    try {
-      // Update user's interests in Firestore
-      const userDocRef = doc(db, "users", userId);
-      await updateDoc(userDocRef, {
-        Interests: interests.split(",").map((interest) => interest.trim()), // Store interests as an array
-        // Add other additional details as needed
-      });
+ const handleSaveDetails = async () => {
+  try {
+    // Update the currently authenticated user's interests in Firestore
+    const userDocRef = doc(db, "users", auth.currentUser.uid);
+    await updateDoc(userDocRef, {
+      Interests: interests.split(",").map((interest) => interest.trim()), // Store interests as an array
+      // Add other additional details as needed
+    });
 
-      // After saving details, navigate to the HomeScreen or any other screen
-      navigation.replace("Home");
-    } catch (error) {
-      console.error("Error updating document: ", error);
-    }
-  };
+    // After saving details, navigate to the HomeScreen or any other screen
+    navigation.replace("Home");
+  } catch (error) {
+    console.error("Error updating document: ", error);
+  }
+};
+
 
   return (
     <KeyboardAvoidingView
@@ -50,6 +51,10 @@ const AdditionalDetailsScreen = ({ route }) => {
         />
         <TouchableOpacity onPress={handleSaveDetails} style={styles.button}>
           <Text style={styles.buttonText}>Save Details</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleSaveDetails} style={styles.button}>
+          <Text style={styles.buttonText}>Skip</Text>
+
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>

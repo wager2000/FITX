@@ -1,5 +1,6 @@
+// Importerer de nødvendige biblioteker og moduler
 import { useNavigation } from "@react-navigation/core";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -7,23 +8,22 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth"; // Import Firebase Modular SDK components
-import { collection, addDoc } from "firebase/firestore";
+import { signInWithEmailAndPassword } from "firebase/auth"; // Importerer Firebase moduler 
 import { db } from "../firebaseConfig";
+import { auth } from "../firebaseConfig";
 
-import { auth } from "../firebaseConfig"; // Make sure you are still importing 'auth' from firebaseConfig
-
+// Definerer komponenten til login-skærmen
 const LoginScreen = () => {
+  // States til opbevaring af brugerens indtastede oplysninger
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+// Bruger navigation til at håndtere skærmnavigation
   const navigation = useNavigation();
 
+  // Funktion til at håndtere brugerens login
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -62,42 +62,50 @@ const LoginScreen = () => {
   };
 
   const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password) // Use signInWithEmailAndPassword from Firebase Modular SDK
+    // Login ved hjælp af Firebase authentication
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
         console.log("Logged in with:", user.email);
+        navigation.replace("Start"); // Navigarer til startskærmen efter accepteret login
       })
       .catch((error) => alert(error.message));
   };
 
+  // Render Loginskærmen
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.input}
-          secureTextEntry
+      {/*Baggrundbillede på loginskærmen*/}
+      <View style={styles.backgroundImageContainer}>
+        <Image
+          source={require("../assets/basket.jpeg")} // Replace with your background image file
+          style={styles.backgroundImage}
         />
       </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleLogin} style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleSignUp}
-          style={[styles.button, styles.buttonOutline]}
-        >
-          <Text style={styles.buttonOutlineText}>Register</Text>
-        </TouchableOpacity>
+      <Text style={styles.headerText}>Login</Text>
+      <View style={styles.formContainer}>
+        {/*Inputfelter*/}
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            style={styles.input}
+            secureTextEntry
+          />
+        </View>
+        {/*Knappen til login*/}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={handleLogin} style={styles.button}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </KeyboardAvoidingView>
   );
@@ -105,14 +113,41 @@ const LoginScreen = () => {
 
 export default LoginScreen;
 
+// Forskellige styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  inputContainer: {
+  headerText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+    marginBottom: 20,
+  },
+  backgroundImageContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  backgroundImage: {
+    flex: 1,
+    width: undefined,
+    height: undefined,
+    resizeMode: "cover",
+  },
+  formContainer: {
     width: "80%",
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+  },
+  inputContainer: {
+    width: "100%",
   },
   input: {
     backgroundColor: "white",
@@ -122,7 +157,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   buttonContainer: {
-    width: "60%",
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
@@ -133,12 +168,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     alignItems: "center",
-  },
-  buttonOutline: {
-    backgroundColor: "white",
-    marginTop: 5,
-    borderColor: "#0782F9",
-    borderWidth: 2,
   },
   buttonText: {
     color: "white",
