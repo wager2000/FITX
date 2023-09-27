@@ -15,13 +15,13 @@ function History({ navigation }) {
       <View style={styles.settingContainer}>
         <TouchableOpacity
           style={styles.settingItem}
-          onPress={() => navController(navigation, "AfsluttedeArrangementer")}
+          onPress={() => navController(navigation, "KommendeArrangementer")}
         >
           <Text style={styles.settingLabel}>Incoming Sessions</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.settingItem}
-          onPress={() => navController(navigation, "KommendeArrangementer")}
+          onPress={() => navController(navigation, "AfsluttedeArrangementer")}
         >
           <Text style={styles.settingLabel}>Finished Sessions</Text>
         </TouchableOpacity>
