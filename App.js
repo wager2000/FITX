@@ -8,8 +8,8 @@ import Startscreen from "./Components/StartScreen";
 import RegistrationScreen from "./Components/RegistrationScreen";
 import SearchScreen from "./Components/SearchScreen";
 import HistoryScreen from "./Components/History";
-import StackNavigatorDetails from "./Components/StackNavigator";
-import StackNavigatorHistory from "./Components/StackNavigatorHistory";
+import StackNavigatorDetails from "./Components/StackNavigator/StackNavigatorDetails";
+import StackNavigatorHistory from "./Components/StackNavigator/StackNavigatorHistory";
 import LoginScreen from "./Components/LoginScreen";
 
 import { AppRegistry } from "react-native";
