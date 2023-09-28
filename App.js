@@ -13,7 +13,6 @@ import StackNavigatorHistory from "./Components/StackNavigator/StackNavigatorHis
 import LoginScreen from "./Components/LoginScreen";
 
 import { AppRegistry } from "react-native";
-import HomeScreen from "./Components/HomeScreen";
 
 // AppRegistry.registerComponent('YourAppName', () => FITX);
 
