@@ -12,53 +12,55 @@ import StackNavigatorDetails from "./Components/StackNavigator/StackNavigatorDet
 import StackNavigatorHistory from "./Components/StackNavigator/StackNavigatorHistory";
 import LoginScreen from "./Components/LoginScreen";
 
-import { AppRegistry } from "react-native";
-
-// AppRegistry.registerComponent('YourAppName', () => FITX);
-
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+function MainTabNavigator() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === "Start") {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "Search") {
+            iconName = focused ? "search" : "search-outline";
+          } else if (route.name === "Settings") {
+            iconName = focused ? "settings" : "settings-outline";
+          } else if (route.name === "History") {
+            iconName = focused ? "time" : "time-outline";
+          } else if (route.name === "Details") {
+            iconName = focused
+              ? "information-circle"
+              : "information-circle-outline";
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: "blue",
+        inactiveTintColor: "gray",
+        style: {
+          backgroundColor: "white",
+        },
+      }}
+    >
+      <Tab.Screen name="Search" component={SearchScreen} />
+      <Tab.Screen name="History" component={StackNavigatorHistory} />
+      <Tab.Screen name="Details" component={StackNavigatorDetails} />
+    </Tab.Navigator>
+  );
+}
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-
-            if (route.name === "Start") {
-              iconName = focused ? "home" : "home-outline";
-            } else if (route.name === "Search") {
-              iconName = focused ? "search" : "search-outline";
-            } else if (route.name === "Settings") {
-              iconName = focused ? "settings" : "settings-outline";
-            } else if (route.name === "History") {
-              iconName = focused ? "time" : "time-outline";
-            } else if (route.name === "Details") {
-              iconName = focused
-                ? "information-circle"
-                : "information-circle-outline";
-            }
-
-            // You can customize the appearance of the icons here
-
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: "blue", // Color of the active tab
-          inactiveTintColor: "gray", // Color of inactive tabs
-          style: {
-            backgroundColor: "white", // Background color of the tab bar
-          },
-        }}
-      >
-        <Tab.Screen name="Start" component={Startscreen} />
-        <Tab.Screen name="Search" component={SearchScreen} />
-        <Tab.Screen name="History" component={StackNavigatorHistory} />
-        <Tab.Screen name="Details" component={StackNavigatorDetails} />
-      </Tab.Navigator>
+      <Stack.Navigator initialRouteName="Registration" headerShown="false">
+        <Stack.Screen name="Registration" component={RegistrationScreen} />
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
