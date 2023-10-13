@@ -10,7 +10,10 @@ import SearchScreen from "./Components/SearchScreen";
 import HistoryScreen from "./Components/History";
 import StackNavigatorDetails from "./Components/StackNavigator/StackNavigatorDetails";
 import StackNavigatorHistory from "./Components/StackNavigator/StackNavigatorHistory";
+import StackNavigatorSearch from "./Components/StackNavigator/StackNavigatorSearch";
+
 import LoginScreen from "./Components/LoginScreen";
+import EventScreen from "./Components/stackComponentsSearch/EventScreen";
 
 import { AppRegistry } from "react-native";
 
@@ -55,7 +58,7 @@ export default function App() {
         }}
       >
         <Tab.Screen name="Start" component={Startscreen} />
-        <Tab.Screen name="Search" component={SearchScreen} />
+        <Tab.Screen name="Search" component={StackNavigatorSearch} />
         <Tab.Screen name="History" component={StackNavigatorHistory} />
         <Tab.Screen name="Details" component={StackNavigatorDetails} />
       </Tab.Navigator>

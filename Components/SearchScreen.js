@@ -6,6 +6,7 @@ import { db } from "../firebaseConfig";
 import { Card, Title, Paragraph } from "react-native-paper";
 import * as Location from "expo-location";
 import Slider from '@react-native-community/slider';
+import { useNavigation } from '@react-navigation/native';
 
 const SearchScreen = () => {
   const [places, setPlaces] = useState([]);
@@ -19,7 +20,19 @@ const SearchScreen = () => {
     longitudeDelta: 0.04, // Smaller value for closer zoom
   });
   const [radiusKm, setRadiusKm] = useState(1); // Initial radius of 1 km
+  const navigation = useNavigation(); // Get the navigation object
+
+  const navigateToEventScreen = (placeName) => {
+    navigation.navigate('EventScreen', { placeName });
+  };
+
+  const handleCardPress = (place) => {
+    setSelectedPlace(place);
+    navigateToEventScreen(place.Name);
+  };
+
   const goToCurrentLocation = async () => {
+
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -29,6 +42,9 @@ const SearchScreen = () => {
 
       const location = await Location.getCurrentPositionAsync({});
       console.log("User location:", location.coords);
+
+      // Update the userLocation state
+      setUserLocation(location.coords);
 
       // Update the map's region to the user's current location
       if (location.coords) {
@@ -90,11 +106,24 @@ const SearchScreen = () => {
     const selected = places.find((place) => place.Name === placeToSearch);
     if (selected) {
       setSelectedPlace(selected);
+      // Update the map's region to focus on the selected place
+      setInitialRegion({
+        latitude: selected.Place.latitude,
+        longitude: selected.Place.longitude,
+        latitudeDelta: 0.04,
+        longitudeDelta: 0.04,
+      });
     } else {
       setSelectedPlace(null);
       // Handle case when the place is not found
     }
   };
+  
+  
+  
+  
+  
+  
 
   // Get the user's location on component mount
   useEffect(() => {
@@ -139,18 +168,19 @@ const SearchScreen = () => {
           <Button title="Search" onPress={handleSearch} />
         
         {/* Replace the "Go to Current Location" button with a custom icon */}
-        <TouchableOpacity onPress={goToCurrentLocation}>
-          <Image
-            source={require("../assets/gps.png")} // Replace with your custom icon's path
-            style={styles.customIcon}
-          />
-        </TouchableOpacity>
+        
       </View>
       <MapView
         style={styles.map}
         region={initialRegion}
         
       >
+        <TouchableOpacity onPress={goToCurrentLocation}>
+          <Image
+            source={require("../assets/gps.png")} // Replace with your custom icon's path
+            style={styles.customIcon}
+          />
+        </TouchableOpacity>
         {/* Add a Circle component for the user's location */}
         {userLocation && (
           <Circle
@@ -186,20 +216,19 @@ const SearchScreen = () => {
       </MapView>
       
       {selectedPlace && (
-          <Card style={styles.card} >
-          
-          <TouchableOpacity onPress={closeCard} style={styles.closeButton}>
-            <Image
-              source={require("../assets/close.png")} // Replace with your close icon's path
-              style={styles.closeIcon}
-            />
-          </TouchableOpacity>
-          <Card.Cover
-            source={require("../assets/Cross.jpeg")}
-            style={styles.cardCover}
+        <Card style={styles.card}>
+        <TouchableOpacity onPress={() => navigateToEventScreen(selectedPlace.Name)}>
+          <Image
+            source={require("../assets/close.png")} // Replace with your close icon's path
+            style={styles.closeIcon}
           />
+        </TouchableOpacity>
+        <Card.Cover
+          source={require("../assets/Cross.jpeg")}
+          style={styles.cardCover}
+        />
+        <TouchableOpacity onPress={() => navigateToEventScreen(selectedPlace.Name)}>
           <Card.Content>
-            
             <Title style={styles.cardTitle}>{selectedPlace.Name}</Title>
             <Paragraph style={styles.cardText}>
               Description: {selectedPlace.Description}
@@ -211,7 +240,8 @@ const SearchScreen = () => {
               Niveau: {selectedPlace.Niveau}
             </Paragraph>
           </Card.Content>
-        </Card>
+        </TouchableOpacity>
+      </Card>
       )}
     {!selectedPlace && ( // Render the Slider only when selectedPlace is null
       <View>
@@ -291,7 +321,9 @@ const styles = StyleSheet.create({
   },
   customIcon: {
     width: 40, // Set the width of your custom icon (smaller size)
-    height: 40, // Set the height of your custom icon (smaller size)
+    height: 40, 
+    left:340,
+    top: 10
   },
   closeButton: {
     top: -5,
