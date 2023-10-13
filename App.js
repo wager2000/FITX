@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons"; // You can replace this with your preferred icon library
 import Startscreen from "./Components/StartScreen";
 import RegistrationScreen from "./Components/RegistrationScreen";
@@ -16,7 +15,6 @@ import { AppRegistry } from "react-native";
 
 // AppRegistry.registerComponent('YourAppName', () => FITX);
 
-const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
