@@ -49,6 +49,7 @@ export default function App() {
           },
         }}
       >
+        <Tab.Screen name="Registration" component={RegistrationScreen} />
         <Tab.Screen name="Login" component={LoginScreen} />
         <Tab.Screen name="Start" component={Startscreen} />
         <Tab.Screen name="Search" component={SearchScreen} />

@@ -20,23 +20,13 @@ const RegistrationScreen = () => {
 
   const navigation = useNavigation();
 
-  const generateUID = () => {
-    // Generate a random UID
-    return (
-      Date.now().toString(36) + Math.random().toString(36).substr(2, 5)
-    ).toUpperCase();
-  };
-
   const handleSignUp = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Generate a UID
-      const uid = generateUID();
-
-      // Add user data to Firestore with the generated UID as the document ID
-      const userRef = doc(db, "users", uid);
+      // Add user data to Firestore with the UID as the document ID
+      const userRef = doc(db, "users", user.uid);
       const userData = {
         Email: email,
         Password: password,
@@ -46,10 +36,9 @@ const RegistrationScreen = () => {
       await setDoc(userRef, userData);
 
       console.log("Registered with:", user.email);
-      console.log("Password is", user.password)
-      console.log("UID:", uid);
+      console.log("UID:", user.uid);
 
-      // You can navigate to the login screen or any other screen after registration.
+      // You can navigate to the home screen or any other screen after registration.
       navigation.replace("LoginScreen");
     } catch (error) {
       console.error("Error creating user: ", error);
@@ -58,12 +47,12 @@ const RegistrationScreen = () => {
   };
 
   const handleLoginLinkPress = () => {
-    navigation.navigate("LoginScreen");
+    navigation.navigate("LoginScreen"); // Replace "Login" with the name of your login screen
   };
 
   return (
     <ImageBackground
-      source={require("../assets/livet.jpeg")}
+      source={require("../assets/livet.jpeg")} // Replace with your image file
       style={styles.container}
     >
       <KeyboardAvoidingView
