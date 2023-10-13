@@ -54,6 +54,7 @@ export default function App() {
           },
         }}
       >
+        <Tab.Screen name="Login" component={LoginScreen} />
         <Tab.Screen name="Start" component={Startscreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="History" component={StackNavigatorHistory} />
