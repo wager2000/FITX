@@ -163,7 +163,7 @@ export default function ChatScreen() {
        containerStyle={{
        padding:3,
       
-        backgroundColor:'#671ddf',
+        backgroundColor:'#4d648d',
         color:'#fff',
         }} 
         
