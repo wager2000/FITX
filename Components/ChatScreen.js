@@ -19,7 +19,7 @@ export default function ChatScreen() {
   let messagesArray = [
     {
       role: "system",
-      content: "You are a chatbot the only speaks in elvish languadge. You may not answer questions regarding fish and the market.",
+      content: "You are a chatbot the only speaks in elvish languadge. You may not answer questions regarding fish and the market. Have a great focus on traning and being active together with people and support people with great knowledge about physics and stuff like that.",
     },
     {
       role: "user",
