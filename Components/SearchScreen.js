@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TextInput, Button, Image, Text} from "react-native";
+import { View, StyleSheet, TextInput, Button, Image, Text, TouchableOpacity} from "react-native";
 import MapView, { Marker, Circle } from "react-native-maps"; // Import Circle component
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
@@ -15,10 +15,38 @@ const SearchScreen = () => {
   const [initialRegion, setInitialRegion] = useState({
     latitude: 55.6761, // Default latitude if user location is not available
     longitude: 12.5683, // Default longitude if user location is not available
-    latitudeDelta: 0.02, // Smaller value for closer zoom
-    longitudeDelta: 0.02, // Smaller value for closer zoom
+    latitudeDelta: 0.04, // Smaller value for closer zoom
+    longitudeDelta: 0.04, // Smaller value for closer zoom
   });
   const [radiusKm, setRadiusKm] = useState(1); // Initial radius of 1 km
+  const goToCurrentLocation = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.error("Location permission denied");
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      console.log("User location:", location.coords);
+
+      // Update the map's region to the user's current location
+      if (location.coords) {
+        setInitialRegion({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          latitudeDelta: 0.04,
+          longitudeDelta: 0.04,
+        });
+      }
+    } catch (error) {
+      console.error("Error getting location: ", error);
+    }
+  };
+  const closeCard = () => {
+    setSelectedPlace(null);
+  };
+
 
   useEffect(() => {
     // Create a reference to the "Places" collection
@@ -87,8 +115,8 @@ const SearchScreen = () => {
           setInitialRegion({
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
-            latitudeDelta: 0.02,
-            longitudeDelta: 0.02,
+            latitudeDelta: 0.08,
+            longitudeDelta: 0.08,
           });
         }
       } catch (error) {
@@ -108,7 +136,15 @@ const SearchScreen = () => {
           onChangeText={(text) => setSearchQuery(text)}
           value={searchQuery}
         />
-        <Button title="Search" onPress={handleSearch} />
+          <Button title="Search" onPress={handleSearch} />
+        
+        {/* Replace the "Go to Current Location" button with a custom icon */}
+        <TouchableOpacity onPress={goToCurrentLocation}>
+          <Image
+            source={require("../assets/gps.png")} // Replace with your custom icon's path
+            style={styles.customIcon}
+          />
+        </TouchableOpacity>
       </View>
       <MapView
         style={styles.map}
@@ -148,25 +184,34 @@ const SearchScreen = () => {
         ))}
         
       </MapView>
+      
       {selectedPlace && (
-         <Card style={styles.card}>
-         <Card.Cover
-           source={require("../assets/Cross.jpeg")} // Add a background image for the card
-           style={styles.cardCover}
-         />
-         <Card.Content>
-           <Title style={styles.cardTitle}>{selectedPlace.Name}</Title>
-           <Paragraph style={styles.cardText}>
-             Description: {selectedPlace.Description}
-           </Paragraph>
-           <Paragraph style={styles.cardText}>
-             Category: {selectedPlace.Category}
-           </Paragraph>
-           <Paragraph style={styles.cardText}>
-             Niveau: {selectedPlace.Niveau}
-           </Paragraph>
-         </Card.Content>
-       </Card>
+          <Card style={styles.card} >
+          
+          <TouchableOpacity onPress={closeCard} style={styles.closeButton}>
+            <Image
+              source={require("../assets/close.png")} // Replace with your close icon's path
+              style={styles.closeIcon}
+            />
+          </TouchableOpacity>
+          <Card.Cover
+            source={require("../assets/Cross.jpeg")}
+            style={styles.cardCover}
+          />
+          <Card.Content>
+            
+            <Title style={styles.cardTitle}>{selectedPlace.Name}</Title>
+            <Paragraph style={styles.cardText}>
+              Description: {selectedPlace.Description}
+            </Paragraph>
+            <Paragraph style={styles.cardText}>
+              Category: {selectedPlace.Category}
+            </Paragraph>
+            <Paragraph style={styles.cardText}>
+              Niveau: {selectedPlace.Niveau}
+            </Paragraph>
+          </Card.Content>
+        </Card>
       )}
     {!selectedPlace && ( // Render the Slider only when selectedPlace is null
       <View>
@@ -244,6 +289,26 @@ const styles = StyleSheet.create({
     color: "#4CAF50", // Text color for the niveau
     fontWeight: "bold",
   },
+  customIcon: {
+    width: 40, // Set the width of your custom icon (smaller size)
+    height: 40, // Set the height of your custom icon (smaller size)
+  },
+  closeButton: {
+    top: -5,
+    left: 290 ,
+    zIndex: 1,
+  },
+  closeIcon: {
+    width: 30, // Set the width of your close icon
+    height: 30, // Set the height of your close icon
+  },
 });
+
+
+
+
+
+
+
 
 export default SearchScreen;
