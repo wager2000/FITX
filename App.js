@@ -12,11 +12,6 @@ import StackNavigatorDetails from "./Components/StackNavigator/StackNavigatorDet
 import StackNavigatorHistory from "./Components/StackNavigator/StackNavigatorHistory";
 import LoginScreen from "./Components/LoginScreen";
 
-import { AppRegistry } from "react-native";
-import HomeScreen from "./Components/HomeScreen";
-
-// AppRegistry.registerComponent('YourAppName', () => FITX);
-
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -45,6 +40,7 @@ export default function App() {
             // You can customize the appearance of the icons here
 
             return <Ionicons name={iconName} size={size} color={color} />;
+            
           },
         })}
         tabBarOptions={{
@@ -63,6 +59,7 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
 
 const styles = StyleSheet.create({
   // Your custom styles here
