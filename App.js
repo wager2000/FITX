@@ -11,7 +11,6 @@ import StackNavigatorDetails from "./Components/StackNavigator/StackNavigatorDet
 import StackNavigatorHistory from "./Components/StackNavigator/StackNavigatorHistory";
 import LoginScreen from "./Components/LoginScreen";
 
-const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -50,6 +49,7 @@ export default function App() {
           },
         }}
       >
+        <Tab.Screen name="Login" component={LoginScreen} />
         <Tab.Screen name="Start" component={Startscreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="History" component={StackNavigatorHistory} />
