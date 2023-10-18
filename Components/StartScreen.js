@@ -10,6 +10,11 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
+import { db } from "../firebaseConfig";
+import { auth } from "../firebaseConfig";
+import { getAuth } from "firebase/auth";
+
+
 
 // Define an array of button properties
 const buttons = [
@@ -109,6 +114,7 @@ const Startscreen = () => {
       // Handle other button presses
     }
   };
+
 
   return (
     <View style={styles.container}>

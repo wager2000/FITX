@@ -31,11 +31,12 @@ function DetailsScreen({ navigation }) {
           onPress={() => navController(navigation, "Settings")}
         >
           <Text style={styles.settingLabel}>Settings</Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
       </View>
     </View>
   );
 }
+
 
 export default DetailsScreen;
 
