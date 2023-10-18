@@ -42,9 +42,27 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginHorizontal: 20,
   },
-  previousQuestionText: {
-    fontSize: 16,
+  previousQuestionsText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  previousQuestionItem: {
+    backgroundColor: '#e5e5e5', // Background color of each question
+    padding: 10,
     marginVertical: 5,
+    borderRadius: 10,
+  },
+  previousQuestionText: {
+    color: 'black', // Text color
+  },
+  showHideButton: {
+    backgroundColor: '#f0f0f0', // Background color of show/hide button
+    padding: 10,
+    marginVertical: 10,
+    borderRadius: 10,
+  },
+  showHideButtonText: {
+    color: '#000', // Text color of show/hide button
   },
 });
 
@@ -232,17 +250,19 @@ export default function ChatScreen() {
   const renderChatFooter = () => {
     if (showPreviousQuestions) {
       return (
-        <View>
+        <View style={styles.previousQuestions}>
           <Text style={styles.previousQuestionsText}>Previous Questions:</Text>
           {previousQuestions.map((question, index) => (
-            <Text style={styles.previousQuestionItem} key={index}>
-              {question}
-            </Text>
+            <View style={styles.previousQuestionItem} key={index}>
+              <Text style={styles.previousQuestionText}>
+                {question}
+              </Text>
+            </View>
           ))}
           <Button
             title="Hide Previous Questions"
             onPress={togglePreviousQuestions}
-            color="red"  // You can change the color to your preference
+            color="black"
           />
         </View>
       );
@@ -251,7 +271,7 @@ export default function ChatScreen() {
       <Button
         title="Show Previous Questions"
         onPress={togglePreviousQuestions}
-        color="green"  // You can change the color to your preference
+        color="black"
       />
     );
   };
