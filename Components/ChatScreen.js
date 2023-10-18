@@ -16,7 +16,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
   },
   inputToolbar: {
-    backgroundColor: '#4d648d',
+    backgroundColor: '#ffffff',
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
   },
   inputText: {
     color: 'white',
@@ -26,7 +28,9 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   bubbleRight: {
-    backgroundColor: '#671ddf',
+    backgroundColor: '#5E9BF2',
+    borderRadius: 15,
+    padding: 10,
   },
   bubbleLeft: {
     backgroundColor: '#e0e0e0',
@@ -269,7 +273,7 @@ export default function ChatScreen() {
     }
     return (
       <Button
-        title="Show Previous Questions"
+        title="Show previous questions from other users "
         onPress={togglePreviousQuestions}
         color="black"
       />
