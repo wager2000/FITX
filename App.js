@@ -14,6 +14,7 @@ import LoginScreen from "./Components/LoginScreen";
 
 import { AppRegistry } from "react-native";
 import ChatScreen from "./Components/ChatScreen";
+import ChatInfoScreen from "./Components/ChatInfoScreen";
 
 // AppRegistry.registerComponent('YourAppName', () => FITX);
 
@@ -56,6 +57,7 @@ export default function App() {
         }}
       >
         <Tab.Screen name="Chat" component={ChatScreen} />
+        <Tab.Screen name="ChatBot" component={ChatInfoScreen} />
         <Tab.Screen name="Start" component={Startscreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="History" component={StackNavigatorHistory} />
