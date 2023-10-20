@@ -1,11 +1,15 @@
+//Viktor
+//Importerer de nødvendige funktioner fra react.
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import * as React from "react";
 
-// Function to navigate to a specific route
+//Funktionen navController gør det muligt at navigerer i appen route.
 const navController = (navigation, route) => {
   navigation.navigate(route);
 };
 
+//Funktionen DetailsScreen returnerer et View med Text og TouchableOpacity, således at brugeren kan navigere til de forskellige komponenter i stacken.
+//Så hver TouchableOpacity har en knap, hvor at brugeren kan trykke på den og komme til den ønskede komponent
 function DetailsScreen({ navigation }) {
   return (
     <View style={styles.container}>
@@ -51,6 +55,7 @@ function DetailsScreen({ navigation }) {
   );
 }
 
+//Styles til UI
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -90,8 +95,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   cameraImage: {
-    width: 70, // Adjust the size as needed
-    height: 70, // Adjust the size as needed
+    width: 70,
+    height: 70, 
     alignSelf: "center",
     marginBottom: 20,
     borderRadius: 50,

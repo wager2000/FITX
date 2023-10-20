@@ -5,7 +5,7 @@ import { Button, Linking, Platform, StyleSheet, Text, TouchableOpacity, View } f
 import * as ImagePicker from "expo-image-picker";
 import { StatusBar } from "expo-status-bar";
 
-/*Vælg billeder fra telefonen*/
+//Funktionen pickImage bruges til at vælge et billede fra telefonens lager.
 const pickImage = async () => {
 
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -21,6 +21,10 @@ const pickImage = async () => {
 
 };
 
+//Funktionen CameraScreen returnerer et View med en kamerafunktion, som brugeren kan tage billeder med.
+//Derudover er der også en knap, hvor at brugeren kan vælge et billede fra telefonens lager.
+//Der er også en knap, hvor at brugeren kan skifte mellem front og back kameraet.
+//Når brugeren har taget et billede, bliver brugeren navigeret tilbage til "Details" viewet.
 const CameraScreen = ({ navigation }) => {
   const cameraRef = useRef();
   const [hasPermission, setHasPermission] = useState(null);
@@ -28,6 +32,7 @@ const CameraScreen = ({ navigation }) => {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [setLoading] = useState(false);
 
+  //UseEffect funktionen bruges til at spørge enheden om tilladelse til at bruge kameraet.
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -58,7 +63,7 @@ const CameraScreen = ({ navigation }) => {
     );
   }
 
-  // Function to handle taking a picture and navigating to "Details" screen
+  //takePictureAndNavigate funktionen bruges til at tage et billede og navigere tilbage til "Details" viewet.
   const takePictureAndNavigate = async () => {
     navigation.navigate("All Options"); // Navigate to "Details" screen
   };
@@ -94,6 +99,7 @@ const CameraScreen = ({ navigation }) => {
   );
 };
 
+//Styles til UI
 const styles = StyleSheet.create({
   container: {
     flex: 1,

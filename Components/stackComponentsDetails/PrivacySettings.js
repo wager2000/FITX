@@ -2,6 +2,9 @@
 import React, { useState } from 'react';
 import { View, Text, Switch, StyleSheet, } from 'react-native';
 
+//Funktionen PrivacySettings returnerer et View med valg brugerne kan ændre på.
+//Disse valg er om brugeren vil dele sin lokation, om brugeren vil give adgang til kameraet og om brugeren vil dele data med appen.
+//Hver valgmulighed har en switch, således at brugeren kan ændre på valget.
 const PrivacySettings = () => {
   const [locationPrivacy, setLocationPrivacy] = useState(true);
   const [contactPrivacy, setContactPrivacy] = useState(true);
@@ -59,6 +62,7 @@ const PrivacySettings = () => {
   );
 };
 
+//Styles til UI
 const styles = StyleSheet.create({
   container: {
     flex: 1,

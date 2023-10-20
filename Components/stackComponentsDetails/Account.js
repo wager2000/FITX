@@ -1,3 +1,4 @@
+//Viktor
 import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -11,46 +12,47 @@ import { auth, db } from "../../firebaseConfig"; // Import Firebase auth and Fir
 import { updateProfile } from "firebase/auth"; // Import the updateProfile function
 import { doc, getDoc, updateDoc } from "firebase/firestore"; // Import Firestore functions
 
-
+//Funktionen AccountScreen returnerer et View med valg brugerne kan ændre på.
+//Disse valg er om brugeren vil ændre på deres email.
+//Der er en knap, hvor at brugeren kan submitte sine ændringer.
 const AccountScreen = () => {
   const [email, setEmail] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [userDocumentRef, setUserDocumentRef] = useState(null); // Store user's Firestore document reference
 
+  //Tjekker om brugeren er logget ind, hvis brugeren er logget ind, så hentes brugerens email fra Firestore.
   useEffect(() => {
-    // Check if a user is authenticated
     const user = auth.currentUser;
     if (user) {
-      setUserDocumentRef(doc(db, "users", user.uid)); // Set the Firestore document reference
-      fetchUserData(user.uid); // Fetch user data when the component mounts
+      setUserDocumentRef(doc(db, "users", user.uid)); 
+      fetchUserData(user.uid); 
     }
   }, []);
 
+  //Funktionen fetchUserData henter brugerens email fra Firestore.
   const fetchUserData = async (userId) => {
     try {
       const userDoc = await getDoc(doc(db, "users", userId));
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        setEmail(userData.Email); // Set the email from Firestore
+        setEmail(userData.Email); 
       }
     } catch (error) {
       console.error("Error fetching user data: ", error);
     }
   };
 
+  //Funktionen handleSave opdaterer brugerens email i Firebase Authentication og Firestore.
   const handleSave = async () => {
     try {
-      // Update the email in Firebase Authentication
       const user = auth.currentUser;
       await updateProfile(user, { email: newEmail });
 
-      // Update the email in Firestore
       await updateDoc(userDocumentRef, {
         Email: newEmail,
       });
 
-      // Update the email in the UI
       setEmail(newEmail);
       setEditMode(false);
     } catch (error) {
@@ -92,6 +94,7 @@ const AccountScreen = () => {
   );
 };
 
+//Styles til UI
 const styles = StyleSheet.create({
   container: {
     flex: 1,

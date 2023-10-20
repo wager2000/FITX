@@ -1,6 +1,8 @@
+//Viktor
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
+//Funktionen Settings returnerer et View med valg brugerne kan ændre på.
 const Settings = () => {
   return (
     <View style={styles.container}>
@@ -25,11 +27,11 @@ const Settings = () => {
         <Text style={styles.settingLabel}>Push Notifications</Text>
         <Text style={styles.settingValue}>Enabled</Text>
       </View>
-      {/* Add more setting items as needed */}
     </View>
   );
 };
 
+//Styles til UI
 const styles = StyleSheet.create({
   container: {
     flex: 1,

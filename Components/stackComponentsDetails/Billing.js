@@ -1,16 +1,16 @@
+//Viktor
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 
+//Funktionen Billing returnerer et View med valg brugerne kan ændre på.
+//Disse valg er om brugeren vil ændre på deres korttype, kortnummer og udløbsdato.
+//Der er en knap, hvor at brugeren kan submitte sine ændringer.
 const Billing = () => {
   const [cardType, setCardType] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
 
   const handleSubmit = () => {
-    // Handle form submission
-    // ...
-
-    // Clear the form fields after submission
     setCardType("");
     setCardNumber("");
     setExpiryDate("");
