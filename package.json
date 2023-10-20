@@ -37,7 +37,10 @@
     "react-navigation": "^4.4.4",
     "react-slick": "^0.29.0",
     "react-slik": "^1.0.1",
-    "yarn": "^1.22.19"
+    "yarn": "^1.22.19",
+    "expo-camera": "~13.4.4",
+    "expo-image-picker": "~14.3.2",
+    "expo-media-library": "~15.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

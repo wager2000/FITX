@@ -4,11 +4,13 @@ import * as React from "react";
 import Billing from "../stackComponentsDetails/Billing";
 import Account from "../stackComponentsDetails/Account";
 import Settings from "../stackComponentsDetails/Settings";
+import PrivacySettings from "../stackComponentsDetails/PrivacySettings";
 /*import Billing from "./stackComponents/Billing";
 import Account from "./stackComponents/Account";
 import Settings from "./stackComponents/Settings";*/
 import DetailsScreen from "../DetailsScreen";
 import { createStackNavigator } from "@react-navigation/stack";
+import CameraScreen from "../stackComponentsDetails/Camera";
 
 //Stacknavigator defineres.
 const Stack = createStackNavigator();
@@ -26,6 +28,14 @@ function StackNavigatorDetails() {
           headerTitleAlign: "center",
           headerTitleStyle: { color: "white" },
           headerStyle: { backgroundColor: "#659EC7" },
+        }}
+      />
+      <Stack.Screen
+        name="Camera"
+        component={CameraScreen}
+        options={{
+          headerTitleStyle: { textAlign: "right", color: "white" },
+          headerStyle: { backgroundColor: "#87AFC7" },
         }}
       />
       <Stack.Screen
@@ -52,7 +62,17 @@ function StackNavigatorDetails() {
           headerStyle: { backgroundColor: "#87AFC7" },
         }}
       />
+      <Stack.Screen
+        name="PrivacySettings"
+        component={PrivacySettings}
+        options={{
+          headerTitleStyle: { color: "black" },
+          headerStyle: { backgroundColor: "#87AFC7" },
+        }}
+      />
     </Stack.Navigator>
+    
+
   );
 }
 

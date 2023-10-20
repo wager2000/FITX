@@ -39,7 +39,7 @@ const RegistrationScreen = () => {
       console.log("UID:", user.uid);
 
       // You can navigate to the home screen or any other screen after registration.
-      navigation.replace("LoginScreen");
+      navigation.navigate("TabNavigator");
     } catch (error) {
       console.error("Error creating user: ", error);
       alert(error.message);

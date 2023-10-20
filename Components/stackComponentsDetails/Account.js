@@ -11,6 +11,7 @@ import { auth, db } from "../../firebaseConfig"; // Import Firebase auth and Fir
 import { updateProfile } from "firebase/auth"; // Import the updateProfile function
 import { doc, getDoc, updateDoc } from "firebase/firestore"; // Import Firestore functions
 
+
 const AccountScreen = () => {
   const [email, setEmail] = useState("");
   const [newEmail, setNewEmail] = useState("");
