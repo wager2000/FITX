@@ -8,8 +8,11 @@ import SendMessage from './Services/RequestPage';
 import { collection, addDoc, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
+// URL til chatbotten ansigtsbillede
+
 let CHAT_BOT_FACE = 'https://res.cloudinary.com/dknvsbuyy/image/upload/v1685678135/chat_1_c7eda483e3.png';
 
+// Stildefinitioner til brugergrænsefladen
 const styles = StyleSheet.create({
   chatContainer: {
     flex: 1,
@@ -69,12 +72,14 @@ const styles = StyleSheet.create({
 });
 
 export default function ChatScreen() {
+  // Tilstande ved hjælp af React Hooks
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [chatFaceColor, setChatFaceColor] = useState();
   const [showPreviousQuestions, setShowPreviousQuestions] = useState(false);
   const [previousQuestions, setPreviousQuestions] = useState([]);
 
+  // Standardbeskeder til chatbotten
   const messagesArray = [
     {
       role: "system",
@@ -89,7 +94,8 @@ export default function ChatScreen() {
       content: "Hello there traveler, how are you doing today?",
     }
   ];
-
+  
+  // Håndtering beskeder
   function MessageHandling(Msg) {
     const message = {
       role: "user",
@@ -98,17 +104,18 @@ export default function ChatScreen() {
     messagesArray.push(message);
     return message;
   }
-
+  // Effekthåndtering for opsætning
   useEffect(() => {
     checkFaceId();
   }, []);
-
+  // Effekthåndtering for visning af tidligere spørgsmål
   useEffect(() => {
     if (showPreviousQuestions) {
       loadPreviousQuestions();
     }
   }, [showPreviousQuestions]);
-
+  
+  // Funktion til at ændre chatbot baseret på brugernes valg (bør slettes, da dette ikke er gældende for denne kode)
   const checkFaceId = async () => {
     const id = await AsyncStorage.getItem('chatFaceId');
     CHAT_BOT_FACE = id ? ChatFaceData[id].image : ChatFaceData[0].image;
@@ -127,10 +134,12 @@ export default function ChatScreen() {
     ])
   }
 
+  // Funktion til at skifte visning af tidligere spørgsmål
   const togglePreviousQuestions = () => {
     setShowPreviousQuestions((prev) => !prev);
   };
 
+  // Funktion til at indlæse tidligere stillede spørgsmål fra Firebase
   const loadPreviousQuestions = async () => {
     try {
       const questionCollectionRef = collection(db, 'Messages');
@@ -149,6 +158,7 @@ export default function ChatScreen() {
     }
   };
 
+  // Håndtering af afsendelse af beskeder 
   const onSend = useCallback((userMessages = []) => {
     const newMessages = GiftedChat.append(userMessages, messagesArray);
     setMessages(newMessages);
@@ -159,6 +169,7 @@ export default function ChatScreen() {
     }
   }, []);
 
+  // Funktion til at gemme beskeder fra brugere i Firebase
   const saveMessageToFirestore = async (text, sender) => {
     try {
       const docRef = await addDoc(collection(db, 'Messages'), {
@@ -172,6 +183,7 @@ export default function ChatScreen() {
     }
   }
 
+  // Funktion til at få svar fra chatbotten
   const getBardResp = (msg) => {
     setLoading(true);
     MessageHandling(msg);
@@ -219,6 +231,7 @@ export default function ChatScreen() {
       });
   }
 
+  // Funktion til at tilpasse beskedbobler
   const renderBubble = (props) => {
     return (
       <Bubble
@@ -235,10 +248,12 @@ export default function ChatScreen() {
     );
   }
 
+  // Funktion til at tilpasse inputværktøjslinjen
   const renderInputToolbar = (props) => {
     return <InputToolbar {...props} containerStyle={styles.inputToolbar} textInputStyle={styles.inputText} />;
   }
 
+  // Funktion til at tilpasse sendeikonet
   const renderSend = (props) => {
     return (
       <Send {...props}>
@@ -248,7 +263,7 @@ export default function ChatScreen() {
       </Send>
     );
   }
-
+  // Funktion til at tilpasse visningen af tidligere spørgsmål
   const renderChatFooter = () => {
     if (showPreviousQuestions) {
       return (

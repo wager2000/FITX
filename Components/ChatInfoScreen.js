@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet, Image } from 'react-native';
 
+// ChatInfoScreen-komponenten modtager navigation som prop fra React Navigation og bruger den til at navigere til ChatScren.
 const ChatInfoScreen = ({ navigation }) => {
+  // Funktionen handleStartChat kaldes, når brugeren klikker på knappen
   const handleStartChat = () => {
-    // Navigate to the ChatScreen when the user clicks the "Start Chat" button
+    // Navigere til ChatScreen, når brugeren klikker på knappen
     navigation.navigate('Chat');
   };
 
@@ -39,6 +41,7 @@ const ChatInfoScreen = ({ navigation }) => {
   );
 };
 
+// Stildefinitioner til komponenten
 const styles = StyleSheet.create({
   container: {
     flex: 1,
