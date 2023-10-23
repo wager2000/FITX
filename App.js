@@ -11,6 +11,7 @@ import HistoryScreen from "./Components/History";
 import StackNavigatorDetails from "./Components/StackNavigator/StackNavigatorDetails";
 import StackNavigatorHistory from "./Components/StackNavigator/StackNavigatorHistory";
 import StackNavigatorSearch from "./Components/StackNavigator/StackNavigatorSearch";
+import StackNavigatorStart from "./Components/StackNavigator/StackNavigatorStart";
 
 import LoginScreen from "./Components/LoginScreen";
 import EventScreen from "./Components/stackComponentsSearch/EventScreen";
@@ -30,7 +31,7 @@ export default function App() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === "Start") {
+            if (route.name === "StartScreen") {
               iconName = focused ? "home" : "home-outline";
             } else if (route.name === "Search") {
               iconName = focused ? "search" : "search-outline";
@@ -43,7 +44,7 @@ export default function App() {
                 ? "information-circle"
                 : "information-circle-outline";
             }
-
+ 
             // You can customize the appearance of the icons here
 
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -57,7 +58,7 @@ export default function App() {
           },
         }}
       >
-        <Tab.Screen name="Start" component={Startscreen} />
+        <Tab.Screen name="StartScreen" component={StackNavigatorStart} />
         <Tab.Screen name="Search" component={StackNavigatorSearch} />
         <Tab.Screen name="History" component={StackNavigatorHistory} />
         <Tab.Screen name="Details" component={StackNavigatorDetails} />

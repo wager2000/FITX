@@ -11,57 +11,56 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 
-// Define an array of button properties
 const buttons = [
   {
     id: 1,
-    text: "Button 1",
-    imageSource: require("../assets/Cross.jpeg"), // Change to the desired image source
+    placeName: "Crossjump",
+    imageSource: require("../assets/Cross.jpeg"),
   },
   {
     id: 2,
-    text: "Button 2",
-    imageSource: require("../assets/Yoga.jpeg"), // Change to the desired image source
+    placeName: "Yoga",
+    imageSource: require("../assets/Yoga.jpeg"),
   },
   {
     id: 3,
-    text: "Button 3",
-    imageSource: require("../assets/Yoga.jpeg"), // Change to the desired image source
+    placeName: "Running",
+    imageSource: require("../assets/Yoga.jpeg"),
   },
   {
     id: 4,
-    text: "Button 4",
-    imageSource: require("../assets/Yoga.jpeg"), // Change to the desired image source
+    placeName: "Tennis",
+    imageSource: require("../assets/Yoga.jpeg"),
   },
   {
     id: 5,
-    text: "Button 5",
-    imageSource: require("../assets/Yoga.jpeg"), // Change to the desired image source
+    placeName: "Crossfit",
+    imageSource: require("../assets/Yoga.jpeg"),
   },
   {
     id: 6,
-    text: "Button 6",
-    imageSource: require("../assets/Yoga.jpeg"), // Change to the desired image source
+    placeName: "HenrikYoga",
+    imageSource: require("../assets/Yoga.jpeg"),
   },
   {
     id: 7,
-    text: "Button 7",
-    imageSource: require("../assets/Cross.jpeg"), // Change to the desired image source
+    placeName: "SuperFit",
+    imageSource: require("../assets/Cross.jpeg"),
   },
   {
     id: 8,
-    text: "Button 8",
-    imageSource: require("../assets/Cross.jpeg"), // Change to the desired image source
+    placeName: "Yogatime",
+    imageSource: require("../assets/Cross.jpeg"),
   },
   {
     id: 9,
-    text: "Button 9",
-    imageSource: require("../assets/Cross.jpeg"), // Change to the desired image source
+    placeName: "Button 9",
+    imageSource: require("../assets/Cross.jpeg"),
   },
   {
     id: 10,
-    text: "Button 10",
-    imageSource: require("../assets/Cross.jpeg"), // Change to the desired image source
+    placeName: "Button 10",
+    imageSource: require("../assets/Cross.jpeg"),
   },
 ];
 
@@ -96,18 +95,7 @@ const Startscreen = () => {
   }, []);
 
   const handleButtonPress = (button) => {
-    if (button.text === "Details") {
-      navigation.navigate("Details");
-    } else {
-      // Handle other button presses
-    }
-  };
-  const handleButtonPressToSearch = (button) => {
-    if (button.text === "Search") {
-      navigation.navigate("Search");
-    } else {
-      // Handle other button presses
-    }
+    navigation.navigate("EventScreen", { placeName: button.placeName });
   };
 
   return (
@@ -124,7 +112,7 @@ const Startscreen = () => {
           >
             <View style={styles.buttonBackground}>
               <Image source={button.imageSource} style={styles.buttonImage} />
-              <Text style={styles.buttonText}>{button.text}</Text>
+              <Text style={styles.buttonText}>{button.placeName}</Text>
             </View>
           </TouchableOpacity>
         ))}
@@ -139,22 +127,7 @@ const Startscreen = () => {
           >
             <View style={styles.buttonBackground}>
               <Image source={button.imageSource} style={styles.buttonImage} />
-              <Text style={styles.buttonText}>{button.text}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
-      <ScrollView horizontal>
-        {buttons.slice(5, 10).map((button) => (
-          <TouchableOpacity
-            key={button.id}
-            style={[styles.button, styles.thirdButton]}
-            onPress={() => handleButtonPress(button)}
-          >
-            <View style={styles.buttonBackground}>
-              <Image source={button.imageSource} style={styles.buttonImage} />
-              <Text style={styles.buttonText}>{button.text}</Text>
+              <Text style={styles.buttonText}>{button.placeName}</Text>
             </View>
           </TouchableOpacity>
         ))}
@@ -162,6 +135,7 @@ const Startscreen = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -169,12 +143,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerContainer: {
-    marginTop: 20, // Adjust the margin as needed
-    marginBottom: 10, // Adjust the margin as needed
+    marginTop: 20,
+    marginBottom: 10,
   },
   headerText: {
-    fontSize: 24, // Adjust the font size as needed
-    fontWeight: "bold", // Adjust the font weight as needed
+    fontSize: 24,
+    fontWeight: "bold",
   },
   button: {
     backgroundColor: "#0782F9",
@@ -202,48 +176,11 @@ const styles = StyleSheet.create({
   secondButton: {
     marginBottom: 20,
   },
-  thirdButton: {
-    marginBottom: 10,
-  },
-  bottomBarButton: {},
-  bottomBar: {
-    flexDirection: "row",
-    backgroundColor: "#0782F9",
-    justifyContent: "space-around",
-    alignItems: "center",
-    height: 60,
-    width: "100%",
-  },
-  bottom: {
-    flexDirection: "row",
-    backgroundColor: "#0782F9",
-    justifyContent: "space-around",
-    alignItems: "center",
-    height: 60,
-    width: "100%",
-  },
-  bottomBarButtonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 15,
-    marginHorizontal: 1,
-  },
-  buttonIconContainer: {
-    alignItems: "center",
-    marginHorizontal: 1,
-  },
-  buttonIcon: {
-    width: 30, // Adjust the icon size as needed
-    height: 30, // Adjust the icon size as needed
-    marginBottom: 5, // Adjust the margin between icon and text
-  },
   buttonBackground: {
     width: "100%",
     height: "100%",
     position: "absolute",
   },
-  bottomBarButton5: {},
 });
-
 
 export default Startscreen;
