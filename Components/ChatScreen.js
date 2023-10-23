@@ -78,7 +78,7 @@ export default function ChatScreen() {
   const messagesArray = [
     {
       role: "system",
-      content: "You are a chatbot that should be focused on training. So if a customer asks or is interested in something regarding training or being active, please provide a great answer to their question. If a customer is interested in knowing which sport offers great focus on being social, mention sports such as yoga, running, pilates, etc.",
+      content: "You are a chatbot that should be focused on training. So if a customer asks or is interested in something regarding training or being active, please provide a great answer to their question. If a customer is interested in knowing which sport offers great focus on being social, mention sports such as yoga, running, pilates.",
     },
     {
       role: "user",
