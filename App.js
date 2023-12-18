@@ -62,7 +62,6 @@ export default function App() {
         <Tab.Screen name="StartScreen" component={StackNavigatorStart} />
         <Tab.Screen name="Search" component={StackNavigatorSearch} />
         <Tab.Screen name="Chat" component={ChatScreen} />
-        <Tab.Screen name="Start" component={Startscreen} />
         <Tab.Screen name="History" component={StackNavigatorHistory} />
         <Tab.Screen name="Details" component={StackNavigatorDetails} />
       </Tab.Navigator>
