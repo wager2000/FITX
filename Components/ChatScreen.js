@@ -177,7 +177,7 @@ export default function ChatScreen() {
         sender,
         timestamp: new Date().toISOString(),
       });
-      console.log('Message sent with ID: ', docRef.id);
+      //console.log('Message sent with ID: ', docRef.id);
     } catch (error) {
       console.error('Error sending message: ', error);
     }
@@ -214,7 +214,7 @@ export default function ChatScreen() {
 
           const chatAIResp = {
             _id: Math.random() * (9999999 - 1),
-            text: "Sorry, I cannot help with it",
+            text: response.data.BOT,
             createdAt: new Date(),
             user: {
               _id: 2,
@@ -293,6 +293,23 @@ export default function ChatScreen() {
     );
   };
 
+/*  return (
+    <View style={styles.chatContainer}>
+      <GiftedChat
+        messages={messages}
+        isTyping={loading}
+        multiline={true}
+        onSend={messages => onSend(messages)}
+        user={{
+          _id: 1,
+        }}
+        renderBubble={renderBubble}
+        renderInputToolbar={renderInputToolbar}
+        renderSend={renderSend}
+        renderFooter={renderChatFooter}
+      />
+    </View>
+  );*/
   return (
     <View style={styles.chatContainer}>
       <GiftedChat

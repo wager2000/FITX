@@ -4,12 +4,12 @@ import axios from "axios";
 
 export default async function SendMessage(message) {
   const options = {
-    method: "POST",
-    url: "https://open-ai21.p.rapidapi.com/conversationgpt35",
+    method: 'POST',
+    url: 'https://open-ai21.p.rapidapi.com/conversationgpt35',
     headers: {
-      "content-type": "application/json",
+      'content-type': 'application/json',
       'X-RapidAPI-Key': '24def70ed0mshc5c837085f61c19p11d3c9jsn3840ff236127',
-    'X-RapidAPI-Host': 'open-ai21.p.rapidapi.com'
+      'X-RapidAPI-Host': 'open-ai21.p.rapidapi.com'
     },
     /*data: {
       messages: [
@@ -30,7 +30,8 @@ export default async function SendMessage(message) {
 
   try {
     const response = await axios.request(options);
-    console.log(response.data);
+    console.log(response.data.result);
+    response = response.data.result
     return response
   } catch (error) {
     console.error(error);
