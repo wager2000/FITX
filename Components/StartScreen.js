@@ -10,6 +10,11 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
+import { db } from "../firebaseConfig";
+import { auth } from "../firebaseConfig";
+import { getAuth } from "firebase/auth";
+
+
 
 const buttons = [
   {
@@ -97,6 +102,7 @@ const Startscreen = () => {
   const handleButtonPress = (button) => {
     navigation.navigate("EventScreen", { placeName: button.placeName });
   };
+
 
   return (
     <View style={styles.container}>

@@ -1,4 +1,3 @@
-// Importerer de nødvendige biblioteker og moduler
 import { useNavigation } from "@react-navigation/core";
 import React, { useState } from "react";
 import {
@@ -10,25 +9,41 @@ import {
   View,
   Image,
 } from "react-native";
-import { signInWithEmailAndPassword } from "firebase/auth"; // Importerer Firebase moduler 
-import { db } from "../firebaseConfig";
-import { auth } from "../firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth"; // Import Firebase modules
+import { doc, getDoc } from "firebase/firestore"; // Import Firestore modules
+import { db, auth } from "../firebaseConfig";
 
-// Definerer komponenten til login-skærmen
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState(""); // State variable to store the user's name
 
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        console.log("Logged in with:", user.email);
-        navigation.replace("Start", { uid: user.uid }); // Pass UID to the Start screen
-      })
-      .catch((error) => alert(error.message));
+  const handleLogin = async () => {
+    try {
+      // Sign in the user
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Retrieve user's name from Firestore using UID
+      const userDoc = doc(db, "users", user.uid);
+      const userSnapshot = await getDoc(userDoc);
+
+      if (userSnapshot.exists()) {
+        // Get the user's name from the document data
+        const userData = userSnapshot.data();
+        setUserName(userData.Name); // Set the user's name in the state
+      } else {
+        console.log("User data not found");
+      }
+
+      // Now, navigate to the Startscreen
+      navigation.replace("Start", { userName });
+    } catch (error) {
+      console.error("Error logging in: ", error);
+      alert(error.message);
+    }
   };
 
   // Render Loginskærmen
