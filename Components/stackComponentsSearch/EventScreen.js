@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 
-import crossJumpImage from '/Users/mikkelwager/Documents/GitHub/FITX/assets/Places/crossfit.jpeg';
-import Yoga from '/Users/mikkelwager/Documents/GitHub/FITX/assets/Places/6.jpeg';
+import crossJumpImage from './../../assets/Places/crossfit.jpeg';
+import Yoga from './../../assets/Places/crossfit.jpeg';
 
 const imageMapping = {
   Crossjump: crossJumpImage,

@@ -39,7 +39,7 @@ const buttons = [
   },
   {
     id: 6,
-    placeName: "HenrikYoga",
+    placeName: "Made by Mila",
     imageSource: require("../assets/Yoga.jpeg"),
   },
   {
