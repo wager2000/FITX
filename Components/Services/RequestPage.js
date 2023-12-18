@@ -1,8 +1,9 @@
-// Sample import fra https://rapidapi.com/rphrp1985/api/open-ai21
-// Hunsk at indsætte den sample de giver ind i en function som jeg har gjort. Husk også at filføje en return response
+// Import af Axios-biblioteket for at foretage HTTP-anmodninger
 import axios from "axios";
 
+// En funktion, der sender en besked til OpenAI's GPT-3.5-model gennem RapidAPI
 export default async function SendMessage(message) {
+  // Indstil de nødvendige indstillinger for Axios-anmodningen
   const options = {
     method: 'POST',
     url: 'https://open-ai21.p.rapidapi.com/conversationgpt35',
@@ -29,11 +30,13 @@ export default async function SendMessage(message) {
   };
 
   try {
+    // Sender anmodningen til OpenAI's API og venter på svaret
     const response = await axios.request(options);
-    console.log(response.data.result);
-    response = response.data.result
-    return response
+    console.log(response.data.result); // Udskriv resultatet til konsollen
+    response = response.data.result; // Gem svaret i variablen "response"
+    return response; // Returner svaret
   } catch (error) {
+    // Håndter eventuelle fejl, der måtte opstå under anmodningen
     console.error(error);
   }
 }
