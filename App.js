@@ -3,21 +3,12 @@ import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons"; // You can replace this with your preferred icon library
-import Startscreen from "./Components/StartScreen";
-import RegistrationScreen from "./Components/RegistrationScreen";
-import SearchScreen from "./Components/SearchScreen";
-import HistoryScreen from "./Components/History";
 import StackNavigatorDetails from "./Components/StackNavigator/StackNavigatorDetails";
 import StackNavigatorHistory from "./Components/StackNavigator/StackNavigatorHistory";
 import StackNavigatorSearch from "./Components/StackNavigator/StackNavigatorSearch";
 import StackNavigatorStart from "./Components/StackNavigator/StackNavigatorStart";
 
-import LoginScreen from "./Components/LoginScreen";
-import EventScreen from "./Components/stackComponentsSearch/EventScreen";
-
-import { AppRegistry } from "react-native";
 import ChatScreen from "./Components/ChatScreen";
-import ChatInfoScreen from "./Components/ChatInfoScreen";
 
 // AppRegistry.registerComponent('YourAppName', () => FITX);
 
@@ -31,12 +22,13 @@ export default function App() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === "StartScreen") {
+            if (route.name === "Start") {
               iconName = focused ? "home" : "home-outline";
             } else if (route.name === "Search") {
               iconName = focused ? "search" : "search-outline";
-            } else if (route.name === "Settings") {
-              iconName = focused ? "settings" : "settings-outline";
+            } else if (route.name === "Chat") {
+              // Use the "chatbox" icon for the "Chat" screen
+              iconName = focused ? "chatbox" : "chatbox-outline";
             } else if (route.name === "History") {
               iconName = focused ? "time" : "time-outline";
             } else if (route.name === "Details") {
@@ -44,22 +36,19 @@ export default function App() {
                 ? "information-circle"
                 : "information-circle-outline";
             }
- 
-            // You can customize the appearance of the icons here
 
             return <Ionicons name={iconName} size={size} color={color} />;
-            
           },
         })}
         tabBarOptions={{
-          activeTintColor: "blue", // Color of the active tab
-          inactiveTintColor: "gray", // Color of inactive tabs
+          activeTintColor: "blue",
+          inactiveTintColor: "gray",
           style: {
-            backgroundColor: "white", // Background color of the tab bar
+            backgroundColor: "white",
           },
         }}
       >
-        <Tab.Screen name="StartScreen" component={StackNavigatorStart} />
+        <Tab.Screen name="Start" component={StackNavigatorStart} />
         <Tab.Screen name="Search" component={StackNavigatorSearch} />
         <Tab.Screen name="Chat" component={ChatScreen} />
         <Tab.Screen name="History" component={StackNavigatorHistory} />
