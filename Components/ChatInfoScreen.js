@@ -1,89 +1,125 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet, Image } from 'react-native';
+// Importering af nødvendige moduler og komponenter
+import { useNavigation } from "@react-navigation/core";
+import React, { useState } from "react";
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  ImageBackground,
+} from "react-native";
+import { updateDoc, doc } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
-// ChatInfoScreen-komponenten modtager navigation som prop fra React Navigation og bruger den til at navigere til ChatScren.
-const ChatInfoScreen = ({ navigation }) => {
-  // Funktionen handleStartChat kaldes, når brugeren klikker på knappen
-  const handleStartChat = () => {
-    // Navigere til ChatScreen, når brugeren klikker på knappen
-    navigation.navigate('Chat');
+// Deklaration af komponenten AdditionalDetailsScreen
+const AdditionalDetailsScreen = ({ route }) => {
+  // Lokal state for brugerens interesser
+  const [interests, setInterests] = useState("");
+  // Navigation hook fra react-navigation
+  const navigation = useNavigation();
+
+  // Funktion til at gemme brugerens detaljer i Firestore
+  const handleSaveDetails = async () => {
+    try {
+      // Referencen til brugerens dokument i Firestore
+      const userDocRef = doc(db, "users", auth.currentUser.uid);
+      // Opdaterer dokumentet med brugerens interesser
+      await updateDoc(userDocRef, {
+        Interests: interests.split(",").map((interest) => interest.trim()),
+      });
+      // Navigerer tilbage til hjemmeskærmen efter opdatering
+      navigation.replace("Home");
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
   };
 
+  // Rendering af komponenten
   return (
-    <View style={styles.container}>
-      {/* Background Image */}
-      <Image
-        source={{ uri: 'https://images.pexels.com/photos/4457913/pexels-photo-4457913.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }}
-        style={styles.backgroundImage}
-      />
-
-      <View style={styles.overlay}>
-        <Image
-          source={{ uri: 'https://cdn-icons-png.flaticon.com/512/8649/8649613.png' }}
-          style={styles.logo}
+    // Container med tastaturundgåelsesvisning
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior="padding"
+      contentContainerStyle={styles.contentContainer}
+    >
+      {/* Overskriftstekst for skærmen */}
+      <Text style={styles.headerText}>Additional Details</Text>
+      {/* Container til formularen */}
+      <View style={styles.formContainer}>
+        {/* Tekstinput til brugerens interesser */}
+        <TextInput
+          placeholder="Interests (comma-separated)"
+          value={interests}
+          onChangeText={(text) => setInterests(text)}
+          style={styles.input}
         />
-        <Text style={styles.title}>Welcome to Your SocialExChatbot</Text>
-        <Text style={styles.description}>
-          This friendly chatbot specializes in providing information and assistance related to various topics, with a primary focus on training and physical activities.
-        </Text>
-        <Text style={styles.instructions}>
-          If you have questions or need guidance on training, fitness, or an active lifestyle, feel free to ask. Our chatbot is here to help you stay healthy and active!
-        </Text>
-        <Text style={styles.suggestions}>
-          Looking for sports that promote social interaction? Ask us about sports like yoga, running, pilates, and more.
-        </Text>
-        <Text style={styles.suggestions}>
-          Curious about activities offered by freelancers near you? Our chatbot has all the local knowledge. Just ask!
-        </Text>
-        <Button title="Start Chat" onPress={handleStartChat} />
+        {/* Gem knap */}
+        <TouchableOpacity onPress={handleSaveDetails} style={styles.button}>
+          <Text style={styles.buttonText}>Save Details</Text>
+        </TouchableOpacity>
+        {/* Spring over knap (ikke implementeret i funktionen) */}
+        <TouchableOpacity onPress={handleSaveDetails} style={styles.button}>
+          <Text style={styles.buttonText}>Skip</Text>
+        </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
-// Stildefinitioner til komponenten
+// Stildefinitioner for komponenten
 const styles = StyleSheet.create({
+  // Generel containerstil
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    resizeMode: "cover",
+    justifyContent: "center",
   },
-  backgroundImage: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
+  // Stil for indhold i containeren
+  contentContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
   },
-  overlay: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)', // Adjust the alpha (fourth value) to control the overlay opacity
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  logo: {
-    width: 100,
-    height: 100,
-    marginBottom: 10,
-  },
-  title: {
+  // Stil for overskriftstekst
+  headerText: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
+    textAlign: "center",
   },
-  description: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 10,
+  // Stil for formularen
+  formContainer: {
+    width: "80%",
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    borderRadius: 10,
+    padding: 20,
+    alignSelf: "center",
   },
-  instructions: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 10,
+  // Stil for tekstinputfelt
+  input: {
+    backgroundColor: "white",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginTop: 5,
   },
-  suggestions: {
+  // Stil for knapper
+  button: {
+    backgroundColor: "#0782F9",
+    width: "100%",
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  // Stil for tekst på knapper
+  buttonText: {
+    color: "white",
+    fontWeight: "700",
     fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 30,
   },
 });
 
-export default ChatInfoScreen;
+// Eksportering af komponenten som standard
+export default AdditionalDetailsScreen;

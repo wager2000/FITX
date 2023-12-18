@@ -1,3 +1,4 @@
+// Importering af nødvendige moduler og komponenter
 import { useNavigation } from "@react-navigation/core";
 import React, { useState } from "react";
 import {
@@ -9,36 +10,40 @@ import {
   View,
   Image,
 } from "react-native";
-import { signInWithEmailAndPassword } from "firebase/auth"; // Import Firebase modules
-import { doc, getDoc } from "firebase/firestore"; // Import Firestore modules
+import { signInWithEmailAndPassword } from "firebase/auth"; 
+import { doc, getDoc } from "firebase/firestore"; 
 import { db, auth } from "../firebaseConfig";
 
+// Deklaration af Loginskærmen
 const LoginScreen = () => {
+  // States til email, password og brugernavn
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState(""); // State variable to store the user's name
 
+  // Navigation hook fra react-navigation
   const navigation = useNavigation();
 
+  // Funktion til at håndtere login
   const handleLogin = async () => {
     try {
-      // Sign in the user
+      // Log ind på brugeren
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Retrieve user's name from Firestore using UID
+      // Hent brugerens navn fra Firestore ved hjælp af UID
       const userDoc = doc(db, "users", user.uid);
       const userSnapshot = await getDoc(userDoc);
 
       if (userSnapshot.exists()) {
-        // Get the user's name from the document data
+        // Hent brugerens navn fra dokumentdata
         const userData = userSnapshot.data();
-        setUserName(userData.Name); // Set the user's name in the state
+        setUserName(userData.Name); // Sæt brugerens navn i staten
       } else {
         console.log("User data not found");
       }
 
-      // Now, navigate to the Startscreen
+      // Naviger til Startskærmen
       navigation.replace("Start", { userName });
     } catch (error) {
       console.error("Error logging in: ", error);
@@ -49,16 +54,16 @@ const LoginScreen = () => {
   // Render Loginskærmen
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      {/*Baggrundbillede på loginskærmen*/}
+      {/* Baggrundsbillede på loginskærmen */}
       <View style={styles.backgroundImageContainer}>
         <Image
-          source={require("../assets/basket.jpeg")} // Replace with your background image file
+          source={require("../assets/basket.jpeg")} // Erstat med din egen billedfil
           style={styles.backgroundImage}
         />
       </View>
       <Text style={styles.headerText}>Login</Text>
       <View style={styles.formContainer}>
-        {/*Inputfelter*/}
+        {/* Inputfelter */}
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Email"
@@ -74,7 +79,7 @@ const LoginScreen = () => {
             secureTextEntry
           />
         </View>
-        {/*Knappen til login*/}
+        {/* Knappen til login */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleLogin} style={styles.button}>
             <Text style={styles.buttonText}>Login</Text>
@@ -87,7 +92,7 @@ const LoginScreen = () => {
 
 export default LoginScreen;
 
-// Forskellige styles
+// Forskellige stilarter
 const styles = StyleSheet.create({
   container: {
     flex: 1,

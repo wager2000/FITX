@@ -38,18 +38,18 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "white", // Background color
+    backgroundColor: "white", 
   },
   headerText: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20, // Spacing below the header text
+    marginBottom: 20, 
   },
   settingContainer: {
-    width: "80%", // Adjust the width as needed
-    backgroundColor: "white", // Background color of the settings container
-    padding: 16, // Padding for the settings container
-    borderRadius: 8, // Border radius for the settings container
+    width: "80%", 
+    backgroundColor: "white", 
+    padding: 16, 
+    borderRadius: 8, 
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -57,19 +57,19 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5, // Shadow for Android
+    elevation: 5, 
   },
   settingItem: {
-    backgroundColor: "#f0f0f0", // Light gray background
-    paddingVertical: 15, // Vertical padding
-    borderRadius: 8, // Border radius
-    marginBottom: 15, // Spacing between settings items
-    alignItems: "center", // Center setting item content horizontally
+    backgroundColor: "#f0f0f0", 
+    paddingVertical: 15,
+    borderRadius: 8, 
+    marginBottom: 15, 
+    alignItems: "center", 
   },
   settingLabel: {
-    color: "#333", // Dark gray text color
-    fontSize: 18, // Setting item text font size
-    fontWeight: "bold", // Setting item text font weight
+    color: "#333", 
+    fontSize: 18, 
+    fontWeight: "bold", 
   },
 });
 

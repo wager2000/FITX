@@ -1,3 +1,4 @@
+// Importering af nødvendige moduler og komponenter
 import { useNavigation } from "@react-navigation/core";
 import React, { useState } from "react";
 import {
@@ -10,37 +11,43 @@ import {
   ImageBackground,
 } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore"; // Update the import statements
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { auth } from "../firebaseConfig";
 
+// Deklaration af Registreringsskærmen
 const RegistrationScreen = () => {
+  // States til email og password
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Navigation hook fra react-navigation
   const navigation = useNavigation();
 
+  // Funktion til at generere en UID
   const generateUID = () => {
-    // Generate a random UID
+    // Generer en tilfældig UID
     return (
       Date.now().toString(36) + Math.random().toString(36).substr(2, 5)
     ).toUpperCase();
   };
 
+  // Funktion til at håndtere brugerregistrering
   const handleSignUp = async () => {
     try {
+      // Opret brugeren
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Generate a UID
+      // Generer en UID
       const uid = generateUID();
 
-      // Add user data to Firestore with the generated UID as the document ID
+      // Tilføj brugerdata til Firestore med den genererede UID som dokument-ID
       const userRef = doc(db, "users", uid);
       const userData = {
         Email: email,
         Password: password,
-        // Add other user data as needed
+        // Tilføj andre brugerdata efter behov
       };
 
       await setDoc(userRef, userData);
@@ -49,7 +56,7 @@ const RegistrationScreen = () => {
       console.log("Password is", user.password)
       console.log("UID:", uid);
 
-      // You can navigate to the login screen or any other screen after registration.
+      // Du kan navigere til login-skærmen eller en anden skærm efter registrering.
       navigation.replace("LoginScreen");
     } catch (error) {
       console.error("Error creating user: ", error);
@@ -57,10 +64,12 @@ const RegistrationScreen = () => {
     }
   };
 
+  // Funktion til at håndtere tryk på login-linket
   const handleLoginLinkPress = () => {
     navigation.navigate("LoginScreen");
   };
 
+  // Render Registreringsskærmen
   return (
     <ImageBackground
       source={require("../assets/livet.jpeg")}
@@ -104,6 +113,7 @@ const RegistrationScreen = () => {
   );
 };
 
+// Forskellige stilarter
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -112,7 +122,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.4)", // Add a semi-transparent black overlay
+    backgroundColor: "rgba(0, 0, 0, 0.4)", // Tilføj en semi-transparent sort overlay
     justifyContent: "center",
     alignItems: "center",
   },
@@ -128,7 +138,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: "80%",
-    backgroundColor: "rgba(255, 255, 255, 0.8)", // Add a semi-transparent white background
+    backgroundColor: "rgba(255, 255, 255, 0.8)", // Tilføj en semi-transparent hvid baggrund
     borderRadius: 10,
     padding: 20,
   },

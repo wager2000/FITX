@@ -1,38 +1,51 @@
+// Importering af nødvendige React og React Native komponenter og biblioteker
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TextInput, Button, Image, Text, TouchableOpacity} from "react-native";
-import MapView, { Marker, Circle } from "react-native-maps"; // Import Circle component
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Button,
+  Image,
+  Text,
+  TouchableOpacity,
+} from "react-native";
+import MapView, { Marker, Circle } from "react-native-maps"; // Importer Circle-komponenten
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { Card, Title, Paragraph } from "react-native-paper";
 import * as Location from "expo-location";
-import Slider from '@react-native-community/slider';
-import { useNavigation } from '@react-navigation/native';
+import Slider from "@react-native-community/slider";
+import { useNavigation } from "@react-navigation/native";
 
+// Funktionel komponent SearchScreen
 const SearchScreen = () => {
+  // State-variabler til håndtering af data og interaktioner i komponenten
   const [places, setPlaces] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPlace, setSelectedPlace] = useState(null);
-  const [userLocation, setUserLocation] = useState(null); // Store user's location
+  const [userLocation, setUserLocation] = useState(null); // Gemmer brugerens placering
   const [initialRegion, setInitialRegion] = useState({
-    latitude: 55.6761, // Default latitude if user location is not available
-    longitude: 12.5683, // Default longitude if user location is not available
-    latitudeDelta: 0.04, // Smaller value for closer zoom
-    longitudeDelta: 0.04, // Smaller value for closer zoom
+    latitude: 55.6761, // Standardbredde, hvis brugerens placering ikke er tilgængelig
+    longitude: 12.5683, // Standardlængde, hvis brugerens placering ikke er tilgængelig
+    latitudeDelta: 0.04, // Mindre værdi for tættere zoom
+    longitudeDelta: 0.04, // Mindre værdi for tættere zoom
   });
-  const [radiusKm, setRadiusKm] = useState(1); // Initial radius of 1 km
-  const navigation = useNavigation(); // Get the navigation object
+  const [radiusKm, setRadiusKm] = useState(1); // Initial radius på 1 km
+  const navigation = useNavigation(); // Hent navigation objektet fra React Navigation
 
+  // Navigationsfunktion til EventScreen
   const navigateToEventScreen = (placeName) => {
-    navigation.navigate('EventScreen', { placeName });
+    navigation.navigate("EventScreen", { placeName });
   };
 
+  // Funktion til håndtering af tryk på et Card-element
   const handleCardPress = (place) => {
     setSelectedPlace(place);
     navigateToEventScreen(place.Name);
   };
 
+  // Funktion til at gå til brugerens nuværende placering
   const goToCurrentLocation = async () => {
-
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -43,10 +56,10 @@ const SearchScreen = () => {
       const location = await Location.getCurrentPositionAsync({});
       console.log("User location:", location.coords);
 
-      // Update the userLocation state
+      // Opdater state med brugerens placering
       setUserLocation(location.coords);
 
-      // Update the map's region to the user's current location
+      // Opdater kortets region til brugerens nuværende placering
       if (location.coords) {
         setInitialRegion({
           latitude: location.coords.latitude,
@@ -59,54 +72,56 @@ const SearchScreen = () => {
       console.error("Error getting location: ", error);
     }
   };
+
+  // Funktion til at lukke det åbne Card-element
   const closeCard = () => {
     setSelectedPlace(null);
   };
 
-
+  // Effekt til at hente steder fra Firestore ved komponentens oprettelse
   useEffect(() => {
-    // Create a reference to the "Places" collection
+    // Opret reference til Firestore-samlingen "Places"
     const placesRef = collection(db, "Places");
 
-    // Fetch places from Firestore initially
+    // Funktion til at hente steder fra Firestore
     const fetchPlaces = async () => {
       const querySnapshot = await getDocs(placesRef);
       const placesData = querySnapshot.docs.map((doc) => {
         const data = doc.data();
-        const id = doc.id; // Retrieve the unique ID
+        const id = doc.id; // Hent den unikke ID
         return { id, ...data };
       });
 
       setPlaces(placesData);
     };
 
-    // Call the function to fetch places initially
+    // Kald funktionen til at hente steder ved komponentens oprettelse
     fetchPlaces();
 
-    // Set up a real-time listener to update places on changes
+    // Opsæt en realtidslytter til at opdatere steder ved ændringer
     const unsubscribe = onSnapshot(placesRef, (querySnapshot) => {
       const placesData = querySnapshot.docs.map((doc) => {
         const data = doc.data();
-        const id = doc.id; // Retrieve the unique ID
+        const id = doc.id; // Hent den unikke ID
         return { id, ...data };
       });
 
       setPlaces(placesData);
     });
 
-    // Clean up the listener when the component unmounts
+    // Rens op i lytteren når komponenten afmonteres
     return () => {
       unsubscribe();
     };
   }, []);
 
-  // Function to handle the search and focus on the selected place
+  // Funktion til håndtering af søgning og fokus på det valgte sted
   const handleSearch = () => {
     const placeToSearch = searchQuery.trim();
     const selected = places.find((place) => place.Name === placeToSearch);
     if (selected) {
       setSelectedPlace(selected);
-      // Update the map's region to focus on the selected place
+      // Opdater kortets region for at fokusere på det valgte sted
       setInitialRegion({
         latitude: selected.Place.latitude,
         longitude: selected.Place.longitude,
@@ -115,17 +130,11 @@ const SearchScreen = () => {
       });
     } else {
       setSelectedPlace(null);
-      // Handle case when the place is not found
+      // Håndter tilfælde, hvor stedet ikke findes
     }
   };
-  
-  
-  
-  
-  
-  
 
-  // Get the user's location on component mount
+  // Hent brugerens placering ved komponentens oprettelse
   useEffect(() => {
     const getLocation = async () => {
       try {
@@ -139,7 +148,7 @@ const SearchScreen = () => {
         console.log("User location:", location.coords);
         setUserLocation(location.coords);
 
-        // Update the initial region with the user's location
+        // Opdater den initielle region med brugerens placering
         if (location.coords) {
           setInitialRegion({
             latitude: location.coords.latitude,
@@ -156,6 +165,7 @@ const SearchScreen = () => {
     getLocation();
   }, []);
 
+  // Render komponentens UI
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
@@ -165,36 +175,30 @@ const SearchScreen = () => {
           onChangeText={(text) => setSearchQuery(text)}
           value={searchQuery}
         />
-          <Button title="Search" onPress={handleSearch} />
-        
-        {/* Replace the "Go to Current Location" button with a custom icon */}
-        
+        <Button title="Search" onPress={handleSearch} />
+        {/* Erstat "Go to Current Location" knappen med et brugerdefineret ikon */}
       </View>
-      <MapView
-        style={styles.map}
-        region={initialRegion}
-        
-      >
+      <MapView style={styles.map} region={initialRegion}>
         <TouchableOpacity onPress={goToCurrentLocation}>
           <Image
-            source={require("../assets/gps.png")} // Replace with your custom icon's path
+            source={require("../assets/gps.png")} // Erstat med stien til dit brugerdefinerede ikon
             style={styles.customIcon}
           />
         </TouchableOpacity>
-        {/* Add a Circle component for the user's location */}
+        {/* Tilføj en Circle-komponent for brugerens placering */}
         {userLocation && (
           <Circle
             center={{
               latitude: userLocation.latitude,
               longitude: userLocation.longitude,
             }}
-            radius={radiusKm * 1000} // Convert kilometers to meters
-            fillColor="rgba(0, 0, 255, 0.5)" // Blue color with transparency
-            strokeColor="rgba(0, 0, 255, 1)" // Blue color without transparency
+            radius={radiusKm * 1000} // Konverter kilometer til meter
+            fillColor="rgba(0, 0, 255, 0.5)" // Blå farve med gennemsigtighed
+            strokeColor="rgba(0, 0, 255, 1)" // Blå farve uden gennemsigtighed
           />
         )}
 
-        {/* Add markers for each place */}
+        {/* Tilføj markører for hvert sted */}
         {places.map((place) => (
           <Marker
             key={place.id}
@@ -212,56 +216,58 @@ const SearchScreen = () => {
             />
           </Marker>
         ))}
-        
       </MapView>
-      
+
       {selectedPlace && (
         <Card style={styles.card}>
-        <TouchableOpacity onPress={() => navigateToEventScreen(selectedPlace.Name)}>
-          <Image
-            source={require("../assets/close.png")} // Replace with your close icon's path
-            style={styles.closeIcon}
+          <TouchableOpacity
+            onPress={() => navigateToEventScreen(selectedPlace.Name)}
+          >
+            <Image
+              source={require("../assets/close.png")} // Erstat med stien til dit lukkeikon
+              style={styles.closeIcon}
+            />
+          </TouchableOpacity>
+          <Card.Cover
+            source={require("../assets/Cross.jpeg")}
+            style={styles.cardCover}
           />
-        </TouchableOpacity>
-        <Card.Cover
-          source={require("../assets/Cross.jpeg")}
-          style={styles.cardCover}
-        />
-        <TouchableOpacity onPress={() => navigateToEventScreen(selectedPlace.Name)}>
-          <Card.Content>
-            <Title style={styles.cardTitle}>{selectedPlace.Name}</Title>
-            <Paragraph style={styles.cardText}>
-              Description: {selectedPlace.Description}
-            </Paragraph>
-            <Paragraph style={styles.cardText}>
-              Category: {selectedPlace.Category}
-            </Paragraph>
-            <Paragraph style={styles.cardText}>
-              Niveau: {selectedPlace.Niveau}
-            </Paragraph>
-          </Card.Content>
-        </TouchableOpacity>
-      </Card>
+          <TouchableOpacity
+            onPress={() => navigateToEventScreen(selectedPlace.Name)}
+          >
+            <Card.Content>
+              <Title style={styles.cardTitle}>{selectedPlace.Name}</Title>
+              <Paragraph style={styles.cardText}>
+                Beskrivelse: {selectedPlace.Description}
+              </Paragraph>
+              <Paragraph style={styles.cardText}>
+                Kategori: {selectedPlace.Category}
+              </Paragraph>
+              <Paragraph style={styles.cardText}>
+                Niveau: {selectedPlace.Niveau}
+              </Paragraph>
+            </Card.Content>
+          </TouchableOpacity>
+        </Card>
       )}
-    {!selectedPlace && ( // Render the Slider only when selectedPlace is null
-      <View>
-       <Slider
-          style={styles.slider}
-          minimumValue={0}
-          maximumValue={10} // You can adjust the maximum value as needed
-          step={1}
-          value={radiusKm}
-          onValueChange={(value) => setRadiusKm(value)}
-        />
-        <Text style={styles.sliderText}>Radius: {radiusKm} km</Text>
-      </View>
-    )}
-  </View>
-);
-
+      {!selectedPlace && ( // Vis Slideren kun når selectedPlace er null
+        <View>
+          <Slider
+            style={styles.slider}
+            minimumValue={0}
+            maximumValue={10} // Du kan justere den maksimale værdi efter behov
+            step={1}
+            value={radiusKm}
+            onValueChange={(value) => setRadiusKm(value)}
+          />
+          <Text style={styles.sliderText}>Radius: {radiusKm} km</Text>
+        </View>
+      )}
+    </View>
+  );
 };
 
-  
+// Stildefinitioner for komponenten
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -269,7 +275,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     padding: 16,
-    backgroundColor: "#F0F0F0", // Background color for the search container
+    backgroundColor: "#F0F0F0", // Baggrundsfarve for søgecontaineren
     borderBottomWidth: 1,
     borderBottomColor: "#DDDDDD",
   },
@@ -281,7 +287,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     marginRight: 16,
     borderRadius: 8,
-    backgroundColor: "#FFFFFF", // Background color for the search input
+    backgroundColor: "#FFFFFF", // Baggrundsfarve for søgeinput
   },
   map: {
     flex: 1,
@@ -304,43 +310,35 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 24,
     marginBottom: 8,
-    color: "#333333", // Text color for the title
+    color: "#333333", // Tekstfarve for titlen
   },
   cardText: {
     fontSize: 16,
     marginBottom: 4,
-    color: "#666666", // Text color for description, category, and niveau
-  },
-  cardCategory: {
-    color: "#007AFF", // Text color for the category
-    fontWeight: "bold",
-  },
-  cardNiveau: {
-    color: "#4CAF50", // Text color for the niveau
-    fontWeight: "bold",
+    color: "#666666", // Tekstfarve for beskrivelse, kategori og niveau
   },
   customIcon: {
-    width: 40, // Set the width of your custom icon (smaller size)
-    height: 40, 
-    left:340,
-    top: 10
+    width: 40, // Angiv bredden på dit brugerdefinerede ikon (mindre størrelse)
+    height: 40,
+    left: 340,
+    top: 10,
   },
   closeButton: {
     top: -5,
-    left: 290 ,
+    left: 290,
     zIndex: 1,
   },
   closeIcon: {
-    width: 30, // Set the width of your close icon
-    height: 30, // Set the height of your close icon
+    width: 30, // Angiv bredden på dit lukkeikon
+    height: 30, // Angiv højden på dit lukkeikon
+  },
+  slider: {
+    // Stildefinitioner for Slideren
+  },
+  sliderText: {
+    // Stildefinitioner for tekst over Slideren
   },
 });
 
-
-
-
-
-
-
-
+// Eksporter SearchScreen komponenten som standard
 export default SearchScreen;

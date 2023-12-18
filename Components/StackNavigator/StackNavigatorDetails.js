@@ -1,4 +1,3 @@
-//Viktor
 //Importerer de nødvendige funktioner fra react, samt de forskellige komponenter.
 import * as React from "react";
 import Billing from "../stackComponentsDetails/Billing";

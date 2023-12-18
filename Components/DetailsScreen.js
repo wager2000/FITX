@@ -1,4 +1,3 @@
-//Viktor
 //Importerer de nødvendige funktioner fra react.
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import * as React from "react";

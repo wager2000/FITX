@@ -1,76 +1,103 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-import { Bubble, GiftedChat, InputToolbar, Send } from 'react-native-gifted-chat';
-import { FontAwesome } from '@expo/vector-icons';
-import ChatFaceData from './Services/ChatFaceData';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import SendMessage from './Services/RequestPage';
-import { collection, addDoc, getDocs, query, orderBy } from "firebase/firestore";
+// Importering af nødvendige moduler og komponenter
+import React, { useState, useEffect, useCallback } from "react";
+import { View, Text, Button, StyleSheet } from "react-native";
+import {
+  Bubble,
+  GiftedChat,
+  InputToolbar,
+  Send,
+} from "react-native-gifted-chat";
+import { FontAwesome } from "@expo/vector-icons";
+import ChatFaceData from "./Services/ChatFaceData";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import SendMessage from "./Services/RequestPage";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+} from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
 // URL til chatbotten ansigtsbillede
-
-let CHAT_BOT_FACE = 'https://res.cloudinary.com/dknvsbuyy/image/upload/v1685678135/chat_1_c7eda483e3.png';
+let CHAT_BOT_FACE =
+  "https://res.cloudinary.com/dknvsbuyy/image/upload/v1685678135/chat_1_c7eda483e3.png";
 
 // Stildefinitioner til brugergrænsefladen
 const styles = StyleSheet.create({
+  // Generel containerstil for chatvinduet
   chatContainer: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#f0f0f0",
   },
+  // Stil for inputværktøjslinjen
   inputToolbar: {
-    backgroundColor: '#4d648d',
+    backgroundColor: "#4d648d",
   },
+  // Stil for tekst i inputværktøjslinjen
   inputText: {
-    color: 'white',
+    color: "white",
   },
+  // Stil for sendeikonet
   sendButton: {
     marginRight: 10,
     marginBottom: 5,
   },
+  // Stil for bobler med brugerens beskeder (højre side)
   bubbleRight: {
-    backgroundColor: '#5E9BF2',
+    backgroundColor: "#5E9BF2",
     borderRadius: 15,
     padding: 10,
   },
+  // Stil for bobler med assistentens beskeder (venstre side)
   bubbleLeft: {
-    backgroundColor: '#e0e0e0',
+    backgroundColor: "#e0e0e0",
   },
+  // Stil for tekst i bobler med brugerens beskeder (højre side)
   bubbleTextRight: {
     padding: 10,
-    color: 'white',
+    color: "white",
   },
+  // Stil for tekst i bobler med assistentens beskeder (venstre side)
   bubbleTextLeft: {
     padding: 10,
   },
+  // Stil for sektionen med tidligere spørgsmål
   previousQuestions: {
     marginVertical: 10,
     marginHorizontal: 20,
   },
+  // Stil for overskriftstekst i tidligere spørgsmål
   previousQuestionsText: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
+  // Stil for hvert tidligere spørgsmål i listen
   previousQuestionItem: {
-    backgroundColor: '#e5e5e5', // Background color of each question
+    backgroundColor: "#e5e5e5",
     padding: 10,
     marginVertical: 5,
     borderRadius: 10,
   },
+  // Stil for tekst i tidligere spørgsmål
   previousQuestionText: {
-    color: 'black', // Text color
+    color: "black",
   },
+  // Stil for knappen til at vise/skjule tidligere spørgsmål
   showHideButton: {
-    backgroundColor: '#f0f0f0', // Background color of show/hide button
+    backgroundColor: "#f0f0f0",
     padding: 10,
     marginVertical: 10,
     borderRadius: 10,
   },
+  // Stil for teksten på knappen til at vise/skjule tidligere spørgsmål
   showHideButtonText: {
-    color: '#000', // Text color of show/hide button
+    color: "#000",
   },
 });
 
+// Hovedkomponenten for chatten
 export default function ChatScreen() {
   // Tilstande ved hjælp af React Hooks
   const [messages, setMessages] = useState([]);
@@ -83,7 +110,8 @@ export default function ChatScreen() {
   const messagesArray = [
     {
       role: "system",
-      content: "You are a chatbot that should be focused on training. So if a customer asks or is interested in something regarding training or being active, please provide a great answer to their question. If a customer is interested in knowing which sport offers great focus on being social, mention sports such as yoga, running, pilates.",
+      content:
+        "You are a chatbot that should be focused on training. So if a customer asks or is interested in something regarding training or being active, please provide a great answer to their question. If a customer is interested in knowing which sport offers great focus on being social, mention sports such as yoga, running, pilates.",
     },
     {
       role: "user",
@@ -92,47 +120,49 @@ export default function ChatScreen() {
     {
       role: "assistant",
       content: "Hello there traveler, how are you doing today?",
-    }
+    },
   ];
-  
-  // Håndtering beskeder
+
+  // Håndtering af beskeder
   function MessageHandling(Msg) {
     const message = {
       role: "user",
       content: Msg,
-    }
+    };
     messagesArray.push(message);
     return message;
   }
+
   // Effekthåndtering for opsætning
   useEffect(() => {
     checkFaceId();
   }, []);
+
   // Effekthåndtering for visning af tidligere spørgsmål
   useEffect(() => {
     if (showPreviousQuestions) {
       loadPreviousQuestions();
     }
   }, [showPreviousQuestions]);
-  
-  // Funktion til at ændre chatbot baseret på brugernes valg (bør slettes, da dette ikke er gældende for denne kode)
+
+  // Funktion til at ændre chatbot baseret på brugernes valg
   const checkFaceId = async () => {
-    const id = await AsyncStorage.getItem('chatFaceId');
+    const id = await AsyncStorage.getItem("chatFaceId");
     CHAT_BOT_FACE = id ? ChatFaceData[id].image : ChatFaceData[0].image;
     setChatFaceColor(ChatFaceData[id].primary);
     setMessages([
       {
         _id: 1,
-        text: 'Hello, I am ' + ChatFaceData[id].name + ', How can I help you?',
+        text: "Hello, I am " + ChatFaceData[id].name + ", How can I help you?",
         createdAt: new Date(),
         user: {
           _id: 2,
-          name: 'React Native',
+          name: "React Native",
           avatar: CHAT_BOT_FACE,
         },
       },
-    ])
-  }
+    ]);
+  };
 
   // Funktion til at skifte visning af tidligere spørgsmål
   const togglePreviousQuestions = () => {
@@ -142,29 +172,31 @@ export default function ChatScreen() {
   // Funktion til at indlæse tidligere stillede spørgsmål fra Firebase
   const loadPreviousQuestions = async () => {
     try {
-      const questionCollectionRef = collection(db, 'Messages');
-      const querySnapshot = await getDocs(query(questionCollectionRef, orderBy('timestamp', 'desc')));
+      const questionCollectionRef = collection(db, "Messages");
+      const querySnapshot = await getDocs(
+        query(questionCollectionRef, orderBy("timestamp", "desc"))
+      );
 
       const previousQuestions = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        if (data.sender === 'user') {
+        if (data.sender === "user") {
           previousQuestions.push(data.text);
         }
       });
       setPreviousQuestions(previousQuestions);
     } catch (error) {
-      console.error('Error loading previous questions:', error);
+      console.error("Error loading previous questions:", error);
     }
   };
 
-  // Håndtering af afsendelse af beskeder 
+  // Håndtering af afsendelse af beskeder
   const onSend = useCallback((userMessages = []) => {
     const newMessages = GiftedChat.append(userMessages, messagesArray);
     setMessages(newMessages);
 
     if (userMessages[0].text) {
-      saveMessageToFirestore(userMessages[0].text, 'user');
+      saveMessageToFirestore(userMessages[0].text, "user");
       getBardResp(userMessages[0].text);
     }
   }, []);
@@ -172,28 +204,27 @@ export default function ChatScreen() {
   // Funktion til at gemme beskeder fra brugere i Firebase
   const saveMessageToFirestore = async (text, sender) => {
     try {
-      const docRef = await addDoc(collection(db, 'Messages'), {
+      const docRef = await addDoc(collection(db, "Messages"), {
         text,
         sender,
         timestamp: new Date().toISOString(),
       });
-      //console.log('Message sent with ID: ', docRef.id);
     } catch (error) {
-      console.error('Error sending message: ', error);
+      console.error("Error sending message: ", error);
     }
-  }
+  };
 
   // Funktion til at få svar fra chatbotten
   const getBardResp = (msg) => {
     setLoading(true);
     MessageHandling(msg);
     SendMessage(messagesArray)
-      .then(response => {
+      .then((response) => {
         if (response.data && response.data.BOT) {
           const responsemessage = {
             role: "assistant",
-            content: response.data.BOT
-          }
+            content: response.data.BOT,
+          };
           messagesArray.push(responsemessage);
           setLoading(false);
 
@@ -203,12 +234,14 @@ export default function ChatScreen() {
             createdAt: new Date(),
             user: {
               _id: 2,
-              name: 'React Native',
+              name: "React Native",
               avatar: CHAT_BOT_FACE,
-            }
-          }
+            },
+          };
 
-          setMessages(previousMessages => GiftedChat.append(previousMessages, chatAIResp));
+          setMessages((previousMessages) =>
+            GiftedChat.append(previousMessages, chatAIResp)
+          );
         } else {
           setLoading(false);
 
@@ -218,18 +251,20 @@ export default function ChatScreen() {
             createdAt: new Date(),
             user: {
               _id: 2,
-              name: 'React Native',
+              name: "React Native",
               avatar: CHAT_BOT_FACE,
-            }
-          }
+            },
+          };
 
-          setMessages(previousMessages => GiftedChat.append(previousMessages, chatAIResp));
+          setMessages((previousMessages) =>
+            GiftedChat.append(previousMessages, chatAIResp)
+          );
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   // Funktion til at tilpasse beskedbobler
   const renderBubble = (props) => {
@@ -246,23 +281,35 @@ export default function ChatScreen() {
         }}
       />
     );
-  }
+  };
 
   // Funktion til at tilpasse inputværktøjslinjen
   const renderInputToolbar = (props) => {
-    return <InputToolbar {...props} containerStyle={styles.inputToolbar} textInputStyle={styles.inputText} />;
-  }
+    return (
+      <InputToolbar
+        {...props}
+        containerStyle={styles.inputToolbar}
+        textInputStyle={styles.inputText}
+      />
+    );
+  };
 
   // Funktion til at tilpasse sendeikonet
   const renderSend = (props) => {
     return (
       <Send {...props}>
         <View style={styles.sendButton}>
-          <FontAwesome name="send" size={24} color="white" resizeMode={'center'} />
+          <FontAwesome
+            name="send"
+            size={24}
+            color="white"
+            resizeMode={"center"}
+          />
         </View>
       </Send>
     );
-  }
+  };
+
   // Funktion til at tilpasse visningen af tidligere spørgsmål
   const renderChatFooter = () => {
     if (showPreviousQuestions) {
@@ -271,9 +318,7 @@ export default function ChatScreen() {
           <Text style={styles.previousQuestionsText}>Previous Questions:</Text>
           {previousQuestions.map((question, index) => (
             <View style={styles.previousQuestionItem} key={index}>
-              <Text style={styles.previousQuestionText}>
-                {question}
-              </Text>
+              <Text style={styles.previousQuestionText}>{question}</Text>
             </View>
           ))}
           <Button
@@ -293,30 +338,14 @@ export default function ChatScreen() {
     );
   };
 
-/*  return (
-    <View style={styles.chatContainer}>
-      <GiftedChat
-        messages={messages}
-        isTyping={loading}
-        multiline={true}
-        onSend={messages => onSend(messages)}
-        user={{
-          _id: 1,
-        }}
-        renderBubble={renderBubble}
-        renderInputToolbar={renderInputToolbar}
-        renderSend={renderSend}
-        renderFooter={renderChatFooter}
-      />
-    </View>
-  );*/
+  // Rendering af hovedkomponenten
   return (
     <View style={styles.chatContainer}>
       <GiftedChat
         messages={messages}
         isTyping={loading}
         multiline={true}
-        onSend={messages => onSend(messages)}
+        onSend={(messages) => onSend(messages)}
         user={{
           _id: 1,
         }}

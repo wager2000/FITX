@@ -1,3 +1,4 @@
+// Importering af nødvendige React og React Native komponenter og stilarter
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -10,12 +11,8 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
-import { db } from "../firebaseConfig";
-import { auth } from "../firebaseConfig";
-import { getAuth } from "firebase/auth";
 
-
-
+// Definition af en liste med knapper, hver repræsenteret som et objekt med id, stedets navn og billedkilde
 const buttons = [
   {
     id: 1,
@@ -68,47 +65,62 @@ const buttons = [
     imageSource: require("../assets/Cross.jpeg"),
   },
 ];
-
+// Funktionel komponent Startscreen
 const Startscreen = () => {
+  // Hent navigation objektet fra React Navigation
   const navigation = useNavigation();
+
+  // State til at gemme brugerens aktuelle placering
   const [userLocation, setUserLocation] = useState(null);
 
+  // Effekt hook for at hente brugerens placering ved komponentens montering
   useEffect(() => {
+    // Funktion til at hente brugerens placering
     const getLocation = async () => {
       try {
+        // Anmod om tilladelse til at få adgang til brugerens placering
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== "granted") {
           console.error("Location permission denied");
           return;
         }
 
+        // Hent brugerens aktuelle placering
         const location = await Location.getCurrentPositionAsync({});
         console.log("User location:", location.coords);
+
+        // Opdater userLocation state med brugerens placering
         setUserLocation(location.coords);
       } catch (error) {
         console.error("Error getting location: ", error);
       }
     };
 
+    // Start en timer for at udsætte anmodningen om brugerens placering med 10 sekunder
     const timer = setTimeout(() => {
       getLocation();
     }, 10000);
 
+    // Ryd timeren, når komponenten afmonteres eller re-renderes
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, []); // Denne effekt udløses kun ved komponentens montering
 
+  // Funktion til at håndtere knaptryk og navigere til EventScreen
   const handleButtonPress = (button) => {
     navigation.navigate("EventScreen", { placeName: button.placeName });
   };
 
-
   return (
+    // Overordnet container for komponenten
     <View style={styles.container}>
+      {/* Container for overskriften */}
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>Her er aktiviteterne</Text>
       </View>
+
+      {/* ScrollView til at vise de første fem knapper */}
       <ScrollView horizontal>
         {buttons.slice(0, 5).map((button) => (
           <TouchableOpacity
@@ -116,6 +128,7 @@ const Startscreen = () => {
             style={[styles.button, styles.topButton]}
             onPress={() => handleButtonPress(button)}
           >
+            {/* Container til baggrundsbillede og tekst på knappen */}
             <View style={styles.buttonBackground}>
               <Image source={button.imageSource} style={styles.buttonImage} />
               <Text style={styles.buttonText}>{button.placeName}</Text>
@@ -124,6 +137,7 @@ const Startscreen = () => {
         ))}
       </ScrollView>
 
+      {/* ScrollView til at vise de næste fem knapper */}
       <ScrollView horizontal>
         {buttons.slice(5, 10).map((button) => (
           <TouchableOpacity
@@ -131,6 +145,7 @@ const Startscreen = () => {
             style={[styles.button, styles.secondButton]}
             onPress={() => handleButtonPress(button)}
           >
+            {/* Container til baggrundsbillede og tekst på knappen */}
             <View style={styles.buttonBackground}>
               <Image source={button.imageSource} style={styles.buttonImage} />
               <Text style={styles.buttonText}>{button.placeName}</Text>
@@ -142,6 +157,7 @@ const Startscreen = () => {
   );
 };
 
+// Stildefinitioner for komponenten ved hjælp af StyleSheet.create
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -189,4 +205,5 @@ const styles = StyleSheet.create({
   },
 });
 
+// Eksporter Startscreen komponenten som standard
 export default Startscreen;
