@@ -4,26 +4,25 @@ import { View, Text, StyleSheet, TextInput } from "react-native";
 const Billing = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Billing</Text>
+      <Text style={styles.header}>Fakturering</Text>
       <View style={styles.settingItem}>
-        <Text style={styles.settingLabel}>Card Type</Text>
-        <TextInput style={styles.settingValue} placeholder="Enter Card Type" />
+        <Text style={styles.settingLabel}>Korttype</Text>
+        <TextInput style={styles.settingValue} placeholder="Indtast korttype" />
       </View>
       <View style={styles.settingItem}>
-        <Text style={styles.settingLabel}>Card Number</Text>
+        <Text style={styles.settingLabel}>Kortnummer</Text>
         <TextInput
           style={styles.settingValue}
-          placeholder="Enter Card Number"
+          placeholder="Indtast kortnummer"
         />
       </View>
       <View style={styles.settingItem}>
-        <Text style={styles.settingLabel}>Expiry Date</Text>
+        <Text style={styles.settingLabel}>Udløbsdato</Text>
         <TextInput
           style={styles.settingValue}
-          placeholder="Enter Expiry Date"
+          placeholder="Indtast udløbsdato"
         />
       </View>
-      {/* Add more billing information fields as needed */}
     </View>
   );
 };

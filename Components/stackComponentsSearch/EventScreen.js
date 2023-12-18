@@ -6,6 +6,7 @@ import { db } from '../../firebaseConfig';
 import crossJumpImage from './../../assets/Places/crossfit.jpeg';
 import Yoga from './../../assets/Places/crossfit.jpeg';
 
+// Mapping af billeder baseret på stedets navn
 const imageMapping = {
   Crossjump: crossJumpImage,
   HenrikYoga: Yoga,
@@ -13,10 +14,11 @@ const imageMapping = {
 
 const EventScreen = ({ route }) => {
   const { placeName } = route.params;
-  const [events, setEvents] = useState([]);
-  const [placeInfo, setPlaceInfo] = useState(null);
+  const [events, setEvents] = useState([]); // State til arrangementer
+  const [placeInfo, setPlaceInfo] = useState(null); // State til stedsoplysninger
 
   useEffect(() => {
+    // Funktion til at hente arrangementer fra Firestore baseret på stedsnavn
     const fetchEvents = async () => {
       try {
         const eventsRef = collection(db, 'Arrengementer');
@@ -29,6 +31,7 @@ const EventScreen = ({ route }) => {
       }
     };
 
+    // Funktion til at hente stedsoplysninger fra Firestore baseret på stedsnavn
     const fetchPlaceInfo = async () => {
       const placesRef = collection(db, 'Places');
       const placeQuery = query(placesRef, where('Name', '==', placeName));
@@ -40,42 +43,48 @@ const EventScreen = ({ route }) => {
       }
     };
 
+    // Udfør fetching af arrangementer og stedsoplysninger
     fetchEvents();
     fetchPlaceInfo();
-  }, [placeName]);
+  }, [placeName]); // Kør useEffect, når placeName ændres
 
+  // Bestem billedet til stedet baseret på stedsnavn
   const placeImage = imageMapping[placeName.toLowerCase()] || crossJumpImage;
 
   return (
     <ScrollView style={styles.container}>
+      {/* Vis stedsoplysninger, hvis de er tilgængelige */}
       {placeInfo && (
         <View style={styles.placeInfo}>
           <Text style={styles.placeInfoTitle}>{placeInfo.Name}</Text>
-          <Text style={styles.placeInfoCategory}>Category: {placeInfo.Category}</Text>
-          <Text style={styles.placeInfoDescription}>Description: {placeInfo.Description}</Text>
+          <Text style={styles.placeInfoCategory}>Kategori: {placeInfo.Category}</Text>
+          <Text style={styles.placeInfoDescription}>Beskrivelse: {placeInfo.Description}</Text>
           <Text style={styles.placeInfoNiveau}>Niveau: {placeInfo.Niveau}</Text>
           <Image source={placeImage} style={styles.placeImage} />
         </View>
       )}
 
+      {/* Vis arrangementer tilknyttet stedet */}
       {events.map((event, index) => (
         <View key={index} style={styles.eventCard}>
-          <Text style={styles.eventTitle}>Event at {event.Place}</Text>
-          <Text style={styles.eventDetail}>Date: {event.Date.toDate().toDateString()}</Text>
+          <Text style={styles.eventTitle}>Arrangement på {event.Place}</Text>
+          <Text style={styles.eventDetail}>Dato: {event.Date.toDate().toDateString()}</Text>
           <Text style={styles.eventDetail}>Sport: {event.Sport}</Text>
-          <Text style={styles.eventPrice}>Price: ${event.Price}</Text>
+          <Text style={styles.eventPrice}>Pris: ${event.Price}</Text>
         </View>
       ))}
     </ScrollView>
   );
 };
 
+// Stildefinitioner til komponenten
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
     backgroundColor: '#F8F8F8',
   },
+  // Stildefinitioner til visning af stedsoplysninger
   placeInfo: {
     margin: 16,
     padding: 16,
@@ -109,6 +118,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderRadius: 8,
   },
+  // Stildefinitioner til visning af arrangementer
   eventCard: {
     marginBottom: 16,
     padding: 16,
@@ -120,12 +130,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 8,
     color: '#333333',
-  },
-  eventImage: {
-    width: '100%',
-    height: 250,
-    marginBottom: 16,
-    borderRadius: 8,
   },
   eventDetail: {
     fontSize: 18,

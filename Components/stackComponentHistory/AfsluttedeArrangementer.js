@@ -4,21 +4,25 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 
 const AfsluttedeArrangementer = () => {
+  // State til at gemme data fra Firebase
   const [arrangementerData, setArrangementerData] = useState([]);
 
+  // useEffect hook til at hente data fra Firebase, når komponenten er blevet monteret
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Hent en samling (collection) fra Firebase-databasen
         const arrangementerCollection = collection(db, 'Arrengementer');
         const snapshot = await getDocs(arrangementerCollection);
-        const currentDate = new Date(); // Get the current date
+        const currentDate = new Date(); // Få den aktuelle dato
 
+        // Behandle snapshottet af data fra Firebase-databasen
         const data = snapshot.docs
           .map((doc) => {
             const eventData = doc.data();
             const dateFirebase = eventData.Date.toDate();
 
-            // Compare the event date with the current date
+            // Sammenlign begivenhedsdatoen med den aktuelle dato
             if (dateFirebase < currentDate) {
               const date = dateFirebase.toLocaleString();
 
@@ -30,18 +34,19 @@ const AfsluttedeArrangementer = () => {
               };
             }
 
-            return null; // Return null for items with future dates
+            return null; // Returnér null for elementer med fremtidige datoer
           })
-          .filter((item) => item !== null); // Filter out null items
+          .filter((item) => item !== null); // Filtrer null-elementer fra
 
+        // Opdater state med de afsluttede arrangementer
         setArrangementerData(data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Fejl ved hentning af data:', error);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchData(); // Kald fetchData funktionen
+  }, []); // Den tomme array som anden parameter sikrer, at useEffect kun køres ved komponentens montering
 
   return (
     <View style={styles.container}>
@@ -62,12 +67,12 @@ const AfsluttedeArrangementer = () => {
   );
 };
 
-
+// Styles for komponenten
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff', // Background color for the entire page
+    backgroundColor: '#fff', // Baggrundsfarve for hele siden
   },
   arrangementContainer: {
     marginBottom: 16,
@@ -89,14 +94,13 @@ const styles = StyleSheet.create({
   },
   dato: {
     fontSize: 16,
-    color: '#555', // Date text color
+    color: '#555', // Tekstfarve for dato
     marginBottom: 4,
   },
   pris: {
     fontSize: 16,
-    color: '#555', // Price text color
+    color: '#555', // Tekstfarve for pris
   },
 });
 
-export default AfsluttedeArrangementer;
-
+export default AfsluttedeArrangementer; // Eksporterer komponenten

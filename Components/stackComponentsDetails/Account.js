@@ -15,14 +15,14 @@ const Account = () => {
   const [email, setEmail] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const [userDocumentRef, setUserDocumentRef] = useState(null); // Store user's Firestore document reference
+  const [userDocumentRef, setUserDocumentRef] = useState(null); // Gem brugerens Firestore dokumentreference
 
   useEffect(() => {
-    // Check if a user is authenticated
+    // Tjek om en bruger er godkendt
     const user = auth.currentUser;
     if (user) {
-      setUserDocumentRef(doc(db, "users", user.uid)); // Set the Firestore document reference
-      fetchUserData(user.uid); // Fetch user data when the component mounts
+      setUserDocumentRef(doc(db, "users", user.uid)); // Sæt Firestore dokumentreference
+      fetchUserData(user.uid); // Hent brugerdata når komponenten monteres
     }
   }, []);
 
@@ -31,29 +31,29 @@ const Account = () => {
       const userDoc = await getDoc(doc(db, "users", userId));
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        setEmail(userData.Email); // Set the email from Firestore
+        setEmail(userData.Email); // Sæt email fra Firestore
       }
     } catch (error) {
-      console.error("Error fetching user data: ", error);
+      console.error("Fejl ved hentning af brugerdata: ", error);
     }
   };
 
   const handleSave = async () => {
     try {
-      // Update the email in Firebase Authentication
+      // Opdater email i Firebase Authentication
       const user = auth.currentUser;
       await updateProfile(user, { email: newEmail });
 
-      // Update the email in Firestore
+      // Opdater email i Firestore
       await updateDoc(userDocumentRef, {
         Email: newEmail,
       });
 
-      // Update the email in the UI
+      // Opdater email i UI'en
       setEmail(newEmail);
       setEditMode(false);
     } catch (error) {
-      console.error("Error updating email: ", error);
+      console.error("Fejl ved opdatering af email: ", error);
     }
   };
 
@@ -66,7 +66,7 @@ const Account = () => {
       {editMode ? (
         <View style={styles.settingItem}>
           <TextInput
-            placeholder="New Email"
+            placeholder="Ny Email"
             value={newEmail}
             onChangeText={(text) => setNewEmail(text)}
             style={styles.input}
@@ -76,14 +76,14 @@ const Account = () => {
       <View style={styles.buttonContainer}>
         {editMode ? (
           <TouchableOpacity onPress={handleSave} style={styles.button}>
-            <Text style={styles.buttonText}>Save</Text>
+            <Text style={styles.buttonText}>Gem</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
             onPress={() => setEditMode(true)}
             style={styles.button}
           >
-            <Text style={styles.buttonText}>Edit</Text>
+            <Text style={styles.buttonText}>Rediger</Text>
           </TouchableOpacity>
         )}
       </View>

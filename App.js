@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons"; // You can replace this with your preferred icon library
+import { Ionicons } from "@expo/vector-icons"; // Du kan erstatte dette med dit foretrukne ikonbibliotek
 import StackNavigatorDetails from "./Components/StackNavigator/StackNavigatorDetails";
 import StackNavigatorHistory from "./Components/StackNavigator/StackNavigatorHistory";
 import StackNavigatorSearch from "./Components/StackNavigator/StackNavigatorSearch";
@@ -17,17 +17,19 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <NavigationContainer>
+      {/* Opretter bundnavigationslinjen med forskellige skærme */}
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
+            // Definerer ikonerne for hver rute baseret på rutenavnet
             if (route.name === "Start") {
               iconName = focused ? "home" : "home-outline";
             } else if (route.name === "Search") {
               iconName = focused ? "search" : "search-outline";
             } else if (route.name === "Chat") {
-              // Use the "chatbox" icon for the "Chat" screen
+              // Brug "chatbox" ikonet til "Chat" skærmen
               iconName = focused ? "chatbox" : "chatbox-outline";
             } else if (route.name === "History") {
               iconName = focused ? "time" : "time-outline";
@@ -41,13 +43,14 @@ export default function App() {
           },
         })}
         tabBarOptions={{
-          activeTintColor: "blue",
-          inactiveTintColor: "gray",
+          activeTintColor: "blue", // Aktivt ikonfarve
+          inactiveTintColor: "gray", // Inaktivt ikonfarve
           style: {
-            backgroundColor: "white",
+            backgroundColor: "white", // Baggrundsfarve for bundnavigationen
           },
         }}
       >
+        {/* Hvert skærmbillede i bundnavigationslinjen */}
         <Tab.Screen name="Start" component={StackNavigatorStart} />
         <Tab.Screen name="Search" component={StackNavigatorSearch} />
         <Tab.Screen name="Chat" component={ChatScreen} />
@@ -57,6 +60,7 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
 
 
 const styles = StyleSheet.create({
